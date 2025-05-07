@@ -137,9 +137,8 @@ bool lpwr_is_allow_timeout(void) {
         return false;
     }
 
-    //if ((wireless_get_current_devs() == DEVS_USB) && (USB_DRIVER.state == USB_ACTIVE)) {
-    if (wireless_get_current_devs() == DEVS_USB) {   
-            manual_timeout = false;
+    if ((wireless_get_current_devs() == DEVS_USB) && (USB_DRIVER.state == USB_ACTIVE)) {
+        manual_timeout = false;
         return false;
     }
 

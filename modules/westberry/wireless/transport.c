@@ -21,7 +21,7 @@ void wls_transport_enable(bool enable) {
     if (enable) {
         if (host_get_driver() != &wireless_driver) {
             host_set_driver(&wireless_driver);
-            usb_device_state_set_protocol(true); //keyboard_protocol = true; // default with true
+            //keyboard_protocol = true; // default with true
         }
     } else {
         if (*md_getp_state() == MD_STATE_CONNECTED) {
@@ -77,12 +77,12 @@ void set_transport(transport_t new_transport) {
 
     switch (transport) {
         case TRANSPORT_USB: {
-            usb_transport_enable(true);
             wls_transport_enable(false);
+            usb_transport_enable(true);
         } break;
         case TRANSPORT_WLS: {
-            wls_transport_enable(true);
             usb_transport_enable(false);
+            wls_transport_enable(true);
         } break;
         default:
             break;
