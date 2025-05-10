@@ -15,3 +15,6 @@
  */
 
 #include "quantum.h"
+#ifdef WIRELESS_ENABLE
+#    include "wireless.h"
+#endif

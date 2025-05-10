@@ -1,4 +1,5 @@
-/* Copyright (C) 2022 jonylee@hfd
+/* Copyright (C) 2022 emolitor@github.com/emolitor
+ * Copyright (C) 2022 jonylee@hfd
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,3 +23,6 @@
 
 #undef WB32_I2C_USE_I2C1
 #define WB32_I2C_USE_I2C1 TRUE
+
+#undef WB32_SERIAL_USE_UART1
+#define WB32_SERIAL_USE_UART1 TRUE

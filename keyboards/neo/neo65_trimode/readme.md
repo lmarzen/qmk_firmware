@@ -15,3 +15,9 @@ the keyboard. Then run the following to flash the firmware.
 ```shell
 make neo/neo65:default:flash
 ```
+
+## Reference Material
+The following shouldn't be upstreamed but I've included documentation relevant
+for porting in the repo as it's not easy to find.
+
+* [WB32FQ95 Data Sheet](EN_DS1104041_WB32FQ95xC_V01.pdf)
