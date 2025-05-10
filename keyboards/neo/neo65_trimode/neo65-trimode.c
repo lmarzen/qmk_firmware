@@ -122,7 +122,7 @@ void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
         md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
-        md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_24G_EN); // timeout 30min to sleep in 2.4g mode, enable
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
         wireless_devs_change(!confinfo.devs, confinfo.devs, false);
         post_init_timer = 0x00;
     }
@@ -141,8 +141,8 @@ uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
         case KC_BT3: {
             wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
         } break;
-        case KC_24G: {
-            wireless_devs_change(wireless_get_current_devs(), DEVS_24G, true);
+        case KC_2G4: {
+            wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
         } break;
         default:
             break;
@@ -184,8 +184,8 @@ bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
         case KC_BT3: {
             WLS_KEYCODE_EXEC(DEVS_BT3);
         } break;
-        case KC_24G: {
-            WLS_KEYCODE_EXEC(DEVS_24G);
+        case KC_2G4: {
+            WLS_KEYCODE_EXEC(DEVS_2G4);
         } break;
         case KC_USB: {
             if (record->event.pressed) {

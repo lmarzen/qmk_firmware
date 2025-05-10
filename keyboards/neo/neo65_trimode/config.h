@@ -32,8 +32,15 @@
 #define EXTERNAL_FLASH_SPI_SLAVE_SELECT_PIN C12
 #define WEAR_LEVELING_BACKING_SIZE (8 * 1024)
 
-/* UART */
+/* UART1 */
 #define UART_TX_PIN A9
 #define UART_TX_PAL_MODE 7
 #define UART_RX_PIN A10
 #define UART_RX_PAL_MODE 7
+
+/* UART3 */
+//#define UART_DRIVER                         SD3
+//#define UART_TX_PIN                         C10
+//#define UART_TX_PAL_MODE                    7
+//#define UART_RX_PIN                         C11
+//#define UART_RX_PAL_MODE                    7
