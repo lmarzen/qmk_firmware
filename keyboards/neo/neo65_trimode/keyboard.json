@@ -22,6 +22,23 @@
         "nkro": true,
         "haptic": false
     },
+    "keycodes": [
+        {
+            "key": "KC_USB"
+        },
+        {
+            "key": "KC_BT1"
+        },
+        {
+            "key": "KC_BT2"
+        },
+        {
+            "key": "KC_BT3"
+        },
+        {
+            "key": "KC_24G"
+        }
+    ],
     "matrix_pins": {
         "cols": ["C1", "C2", "C3", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "C4", "C5", "B0", "B1", "B2"],
         "rows": ["C6", "C7", "C8", "C9", "B14"]
