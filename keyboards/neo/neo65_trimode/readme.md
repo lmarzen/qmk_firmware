@@ -22,13 +22,13 @@ make neo/neo65_trimode:default:flash
 ```
 
 ## What wireless chip is the Neo65 using?
-![WCH CH582F](documentation/wireless.jpg)
 The Neo65 uses a WCH CH582F running a custom firmware to provide wireless
 connectivity. The CH582F is attached to (I think UART1 but still researching).
+![WCH CH582F](documentation/wireless.jpg)
 
 ## What flash is the WB32FQ95 using on the Neo65?
-![Puya P25D80SH](documentation/flash.jpg)
 The WB32FQ95 on the Neo65 is using a Puya P25D80SH serial flash.
+![Puya P25D80SH](documentation/flash.jpg)
 
 ## WB32FQ95 which UART is the Neo65 using?
 The WB32FQ95 supports 3 UARTS since PA2 and PA3 are used by the matrix we can
