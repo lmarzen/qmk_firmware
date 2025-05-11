@@ -11,7 +11,7 @@ Work on this board is currently in progress.
 - [x] Document basic components
 - [x] Probe and verify matrix
 - [x] Basic wired functionality
-- [ ] Add support for SPI Flash
+- [ ] Add support for QSPI Flash
 - [ ] Backport Westberry Trimode Wireless
 - [ ] Fix invalid USB VID/PID
 
@@ -25,20 +25,24 @@ make neo/neo65_trimode:default:flash
 
 ## What wireless chip is the Neo65 using?
 The Neo65 uses a WCH CH582F running a custom firmware to provide wireless
-connectivity. I believe the CH582F is attached to (I think UART1 but still researching).
+connectivity. The CH582F is attached to UART1 on the WB32FQ92.
 
 ![WCH CH582F](documentation/wireless.jpg)
 
 
 ## What flash is the WB32FQ95 using on the Neo65?
 The WB32FQ95 on the Neo65 is using a Puya P25D80SH serial flash.
+* QSPI
+   * QSPI_SCK is on PB3
+   * QSPI_MISO is on PB4
+   * QSPI_MOSI is on PB5
 
 ![Puya P25D80SH](documentation/flash.jpg)
 
 
 ## WB32FQ95 which UART is the Neo65 using?
 The WB32FQ95 supports 3 UARTS since PA2 and PA3 are used by the matrix we can
-rule UART2 out.
+rule UART2 out. Probing reveals the UART1 is used to connect to the CH582F.
 * UART1 (SD1)
    * UART1_TX is on PA9
    * UART1_RX is on PA10
