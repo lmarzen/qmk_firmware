@@ -65,7 +65,7 @@ for porting in the repo to have everything in a single place.
 ## Tools
 These are the tools I'm using to reverse engineer the Neo65.
 
-* Saleae Pro 16 Logic Analyzer
-* E-Z Hook X2015 SMD Probes
-* Mustool USB Microscope
-* Brymen BM789 Multimeter
+* [Saleae Pro 16 Logic Analyzer](https://www.saleae.com)
+* [E-Z Hook X2015 SMD Probes](https://e-z-hook.com/test-hooks/micro-hook/x2015-ultra-thin-double-gripper-micro-test-hook/)
+* [Mustool USB Microscope](https://www.eevblog.com/forum/testgear/mustool-g1200-digital-microscope-12mp-7-lcd-display-1-1200x/)
+* [Brymen BM789 Multimeter](http://www.brymen.com/PD02BM780_789.html)
