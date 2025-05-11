@@ -3,7 +3,7 @@ The Neo65 Tri-mode is based on a Westberry Tech WB32FQ95 MCU in a LQFP64
 package and can be programmed with wb32-dfu. The keyboard uses a WCH CH582F 
 chip running a proprietary firmware to provide wireless connectivity. This is 
 a community port which was derived from a partial source originally released 
-by the manufacturer.
+by the manufacturer and reverse engineered by probing the hardware directly.
 
 
 ## Status
