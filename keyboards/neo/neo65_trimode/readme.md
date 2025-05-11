@@ -60,3 +60,12 @@ for porting in the repo to have everything in a single place.
 * [WB32FQ95 Data Sheet](documentation/EN_DS1104041_WB32FQ95xC_V01.pdf)
 * [WCH CH582F Data Sheet](documentation/CH583DS1.PDF)
 * [Puya P25D80SH Data Sheet](documentation/PUYA-P25Q80H-SSH-IT_C194872.pdf)
+
+
+## Tools
+These are the tools I'm using to reverse engineer the Neo65.
+
+* Saleae Pro 16 Logic Analyzer
+* E-Z Hook X2015 SMD Probes
+* Mustool USB Microscope
+* Brymen BM789 Multimeter
