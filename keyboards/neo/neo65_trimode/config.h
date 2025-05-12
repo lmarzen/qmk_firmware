@@ -47,3 +47,5 @@
 //#define UART_TX_PAL_MODE                    7
 //#define UART_RX_PIN                         C11
 //#define UART_RX_PAL_MODE                    7
+
+#define LED_PIN_ON_STATE 0
