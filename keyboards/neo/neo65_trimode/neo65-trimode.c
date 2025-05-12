@@ -20,7 +20,43 @@
     include "wireless.h"
 #endif
 
+// Number of LEDs on the keyboard.
+#define NUM_LEDS  5
+
+#define CAPSLOCK_LED  A8 // This is the indicator configured in keyboard.json
+#define ESC_LED       D2
+#define Q_LED         C11
+#define W_LED         C10
+#define E_LED         A15
+#define R_LED         C0
+
+// Period for LED_BLINK_FAST blinking. Smaller value implies faster.
+#define LED_BLINK_FAST_PERIOD_MS  300
+
+// Possible LED states.
+enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
+static uint8_t led_blink_state[NUM_LEDS] = {0};
+
 void keyboard_post_init_kb(void) {
+
+    // LED Blinker Callback
+    uint32_t led_blink_callback(uint32_t trigger_time, void* cb_arg) {
+        static const uint8_t pattern[4] = {0x00, 0xff, 0x0f, 0xaa};
+        static uint8_t phase = 0;
+        phase = (phase + 1) % 8;
+
+        uint8_t bit = 1 << phase;
+        // Adjust according to keyboard. See notes below.
+        writePin(ESC_LED, (pattern[led_blink_state[0]] & bit) != 0);
+        writePin(Q_LED, (pattern[led_blink_state[1]] & bit) != 0);
+        writePin(W_LED, (pattern[led_blink_state[2]] & bit) != 0);
+        writePin(E_LED, (pattern[led_blink_state[3]] & bit) != 0);
+        //writePin(R_LED, (pattern[led_blink_state[4]] & bit) != 0);
+
+        return LED_BLINK_FAST_PERIOD_MS / 2;
+    }
+
+    defer_exec(1, led_blink_callback, NULL);
 
 //#ifdef CONSOLE_ENABLE
 //    debug_enable = true;
