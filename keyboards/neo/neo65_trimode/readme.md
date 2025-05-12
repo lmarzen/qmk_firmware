@@ -58,6 +58,7 @@ rule UART2 out. Probing reveals the UART1 is used to connect to the CH582F.
 The following shouldn't be upstreamed but I've included documentation relevant
 for porting in the repo to have everything in a single place.
 * [WB32FQ95 Data Sheet](documentation/EN_DS1104041_WB32FQ95xC_V01.pdf)
+* [WB32FQ95 Reference Manual](documentation/EN_RM2905025_WB32FQ95xx_V01.pdf)
 * [WCH CH582F Data Sheet](documentation/CH583DS1.PDF)
 * [Puya P25D80SH Data Sheet](documentation/PUYA-P25Q80H-SSH-IT_C194872.pdf)
 
