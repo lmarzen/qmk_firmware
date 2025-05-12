@@ -54,6 +54,10 @@ rule UART2 out. Probing reveals the UART1 is used to connect to the CH582F.
    * UART3_RX is on PC11
 
 
+## What battery charging circuit is present?
+A TP4056 IC is onboard which is used for battery charging and management.
+
+
 ## Reference Material
 The following shouldn't be upstreamed but I've included documentation relevant
 for porting in the repo to have everything in a single place.
@@ -61,6 +65,7 @@ for porting in the repo to have everything in a single place.
 * [WB32FQ95 Reference Manual](documentation/EN_RM2905025_WB32FQ95xx_V01.pdf)
 * [WCH CH582F Data Sheet](documentation/CH583DS1.PDF)
 * [Puya P25D80SH Data Sheet](documentation/PUYA-P25Q80H-SSH-IT_C194872.pdf)
+* [TP4056 Data Sheet](documentation/TP4056.PDF)
 
 
 ## Tools
