@@ -64,7 +64,7 @@ A TP4056 IC is onboard which is used for battery charging and management.
 * PC11 is wired to the Q LED
 * PC10 is wired to the W LED
 * PA15 is wired to the E LED
-* PC0 is wired to the R LED
+* PC0 is wired to the R LED (Something is weird with this mapping I need to check it again)
 
 ## Reference Material
 The following shouldn't be upstreamed but I've included documentation relevant
