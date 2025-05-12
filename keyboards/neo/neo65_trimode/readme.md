@@ -58,6 +58,14 @@ rule UART2 out. Probing reveals the UART1 is used to connect to the CH582F.
 A TP4056 IC is onboard which is used for battery charging and management.
 
 
+## How are the LEDs wired?
+* PD2 is wired to the ESD LED
+* PA8 is wired to the CAPSLOCK LED
+* PC11 is wired to the Q LED
+* PC10 is wired to the W LED
+* PA15 is wired to the E LED
+* PC0 is wired to the R LED
+
 ## Reference Material
 The following shouldn't be upstreamed but I've included documentation relevant
 for porting in the repo to have everything in a single place.
