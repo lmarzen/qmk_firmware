@@ -64,6 +64,8 @@ is low when charging and high when fully charged.
 * STDBY of the TP4056 is wired to GROUND
 * CHRG of the TP4056 is wired to PIN PB9
 
+![TP4056](documentation/bmic.jpg)
+
 
 ## How are the LEDs wired?
 The LEDs are WS2812 the first of which is wired to PB10.
