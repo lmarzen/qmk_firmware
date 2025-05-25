@@ -54,6 +54,9 @@ void keyboard_post_init_kb(void) {
 
     eeconfig_confinfo_init();
 
+    // Set GPIO as high input for batter charging state
+    gpio_set_pin_input_high(BT_CHARGE_PIN);
+
 #ifdef LED_POWER_EN_PIN
     gpio_set_pin_output(LED_POWER_EN_PIN);
     gpio_write_pin_low(LED_POWER_EN_PIN);
@@ -340,6 +343,15 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_set_color(index, RGB_YELLOW);
                 }
             }
+        }
+
+        // Check if battery is charging
+        if (gpio_read_pin(BT_CHARGE_PIN)) {
+            // Pin is high, fully charged
+            rgb_matrix_set_color(0, RGB_GREEN);
+        } else {
+            // Pin is low, charging
+            rgb_matrix_set_color(0, RGB_RED);
         }
     }
 
