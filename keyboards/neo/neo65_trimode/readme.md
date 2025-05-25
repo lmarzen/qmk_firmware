@@ -73,7 +73,7 @@ for porting in the repo to have everything in a single place.
 * [WB32FQ95 Reference Manual](documentation/EN_RM2905025_WB32FQ95xx_V01.pdf)
 * [WCH CH582F Data Sheet](documentation/CH583DS1.PDF)
 * [Puya P25D80SH Data Sheet](documentation/PUYA-P25Q80H-SSH-IT_C194872.pdf)
-* [TP4056 Data Sheet](documentation/TP4056.PDF)
+* [TP4056 Data Sheet](documentation/TP4056.pdf)
 
 
 ## Tools
