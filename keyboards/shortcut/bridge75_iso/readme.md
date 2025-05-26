@@ -15,7 +15,7 @@ Work on this board is currently in progress.
 - [x] Basic wired functionality
 - [x] Add support for QSPI Flash
 - [x] Backport Updated Westberry Trimode Wireless
-- [ ] Implement Basic PMIC/Battery Management
+- [x] Implement Basic PMIC/Battery Management
 - [ ] Implement LED Indicators
 - [ ] Investigate Power Management / Battery Life
 

@@ -320,6 +320,16 @@ void rgb_matrix_wls_indicator(void) {
 }
 #    endif
 
+rgb_t hsv_to_matrix_adjusted_rgb(uint8_t h, uint8_t s, uint8_t v) {
+    hsv_t hsv = {h, s, v};
+
+    if (hsv.v > rgb_matrix_get_val()) {
+        hsv.v = rgb_matrix_get_val();
+    }
+
+    return hsv_to_rgb(hsv);
+}
+
 bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
     if (rgb_matrix_indicators_advanced_user(led_min, led_max) != true) {
@@ -334,13 +344,15 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
     if (get_highest_layer(layer_state) > 0) {
         uint8_t layer = get_highest_layer(layer_state);
 
+        rgb_t yellow = hsv_to_matrix_adjusted_rgb(HSV_YELLOW);
+
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
 
                 if (index >= led_min && index < led_max && index != NO_LED &&
                 keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_YELLOW);
+                    rgb_matrix_set_color(index, yellow.r, yellow.g, yellow.b);
                 }
             }
         }
@@ -348,10 +360,12 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         // Check if battery is charging
         if (gpio_read_pin(BT_CHARGE_PIN)) {
             // Pin is high, fully charged
-            rgb_matrix_set_color(0, RGB_GREEN);
+            rgb_t green = hsv_to_matrix_adjusted_rgb(HSV_GREEN);
+            rgb_matrix_set_color(0, green.r, green.g, green.b);
         } else {
             // Pin is low, charging
-            rgb_matrix_set_color(0, RGB_RED);
+            rgb_t red = hsv_to_matrix_adjusted_rgb(HSV_RED);
+            rgb_matrix_set_color(0, red.r, red.g, red.b);
         }
     }
 
