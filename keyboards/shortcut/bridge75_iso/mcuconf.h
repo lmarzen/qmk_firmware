@@ -1,3 +1,4 @@
+// Copyright 2025 emolitor github.com/emolitor)
 // Copyright 2024 Wind (@yelishang)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
@@ -11,15 +12,21 @@
 #undef WB32_SERIAL_USE_UART1
 #define WB32_SERIAL_USE_UART1 TRUE
 
+#undef WB32_SPI_USE_SPIM2
+#define WB32_SPI_USE_SPIM2 TRUE
+
 #undef WB32_SPI_USE_QSPI
 #define WB32_SPI_USE_QSPI TRUE
 
 // The interrupt priority of the WS2812 driver must be higher than that of other SPI devices.
-#undef WB32_SPI_QSPI_IRQ_PRIORITY
-#define WB32_SPI_QSPI_IRQ_PRIORITY 9
-
 #undef WB32_SPI_SPIM2_IRQ_PRIORITY
-#define WB32_SPI_SPIM2_IRQ_PRIORITY 10
+#define WB32_SPI_SPIM2_IRQ_PRIORITY 9
+
+#undef WB32_SPI_QSPI_IRQ_PRIORITY
+#define WB32_SPI_QSPI_IRQ_PRIORITY 10
+
+#undef WB32_SERIAL_UART1_PRIORITY
+#define WB32_SERIAL_UART1_PRIORITY 8
 
 /* system clock set to 96Mhz */
 #undef WB32_PLLDIV_VALUE
