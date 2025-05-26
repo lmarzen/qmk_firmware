@@ -127,15 +127,15 @@ uint32_t wls_process_long_press(uint32_t trigger_time, void *cb_arg) {
     uint16_t keycode = *((uint16_t *)cb_arg);
 
     switch (keycode) {
-        case KC_BT1: {
-            wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
-        } break;
-        case KC_BT2: {
-            wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
-        } break;
-        case KC_BT3: {
-            wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
-        } break;
+        //case KC_BT1: {
+        //    wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
+        //} break;
+        //case KC_BT2: {
+        //    wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
+        //} break;
+        //case KC_BT3: {
+        //    wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
+        //} break;
         case KC_2G4: {
             wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
         } break;
@@ -170,15 +170,15 @@ bool process_record_wls(uint16_t keycode, keyrecord_t *record) {
         } while (false)
 
     switch (keycode) {
-        case KC_BT1: {
-            WLS_KEYCODE_EXEC(DEVS_BT1);
-        } break;
-        case KC_BT2: {
-            WLS_KEYCODE_EXEC(DEVS_BT2);
-        } break;
-        case KC_BT3: {
-            WLS_KEYCODE_EXEC(DEVS_BT3);
-        } break;
+        //case KC_BT1: {
+        //    WLS_KEYCODE_EXEC(DEVS_BT1);
+        //} break;
+        //case KC_BT2: {
+        //    WLS_KEYCODE_EXEC(DEVS_BT2);
+        //} break;
+        //case KC_BT3: {
+        //    WLS_KEYCODE_EXEC(DEVS_BT3);
+        //} break;
         case KC_2G4: {
             WLS_KEYCODE_EXEC(DEVS_2G4);
         } break;
