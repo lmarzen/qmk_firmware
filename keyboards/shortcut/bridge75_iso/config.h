@@ -3,6 +3,11 @@
 
 #pragma once
 
+#define MD_BT1_NAME "Bridge75 BT1"
+#define MD_BT2_NAME "Bridge75 BT2"
+#define MD_BT3_NAME "Bridge75 BT3"
+#define MD_DONGLE_PRODUCT "Bridge75 Dongle"
+
 #ifdef WIRELESS_ENABLE
   #define LPWR_TIMEOUT RGB_MATRIX_TIMEOUT
   #define WLS_KEYBOARD_REPORT_KEYS 5
