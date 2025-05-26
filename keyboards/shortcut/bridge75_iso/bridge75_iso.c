@@ -337,10 +337,6 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         return false;
     }
 
-    if (host_keyboard_led_state().caps_lock) {
-        rgb_matrix_set_color(43, 0x77, 0x77, 0x77);
-    }
-
     // When not in default layer set all mapped keys to yellow
     if (get_highest_layer(layer_state) > 0) {
         uint8_t layer = get_highest_layer(layer_state);
@@ -373,6 +369,10 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 #    ifdef WIRELESS_ENABLE
     rgb_matrix_wls_indicator();
 #    endif
+
+    if (host_keyboard_led_state().caps_lock) {
+        rgb_matrix_set_color(43, 0x77, 0x77, 0x77);
+    }
 
     return true;
 }
