@@ -69,7 +69,7 @@ void keyboard_post_init_kb(void) {
     eeconfig_confinfo_init();
 
     // Set GPIO as high input for battery charging state
-    gpio_set_pin_input_high(BT_CABLE_PIN);
+    gpio_set_pin_input(BT_CABLE_PIN);
     gpio_set_pin_input_high(BT_CHARGE_PIN);
 
 #ifdef LED_POWER_EN_PIN
@@ -370,15 +370,20 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             }
         }
 
-        // Check charging state
-        if (gpio_read_pin(BT_CHARGE_PIN)) {
-            // Pin is high, fully charged
-            rgb_t green = hsv_to_matrix_adjusted_rgb(HSV_GREEN);
-            rgb_matrix_set_color(0, green.r, green.g, green.b);
+        // Check if we are plugged in
+        if (gpio_read_pin(BT_CABLE_PIN)) {
+            if (gpio_read_pin(BT_CHARGE_PIN)) {
+                // Pin is high, fully charged
+                rgb_t green = hsv_to_matrix_adjusted_rgb(HSV_GREEN);
+                rgb_matrix_set_color(0, green.r, green.g, green.b);
+            } else {
+                // Pin is low, charging
+                rgb_t red = hsv_to_matrix_adjusted_rgb(0, 255, blink_index); // Pleasently blinking RED
+                rgb_matrix_set_color(0, red.r, red.g, red.b);
+            }
         } else {
-            // Pin is low, charging
-            rgb_t red = hsv_to_matrix_adjusted_rgb(0, 255, blink_index); // Pleasently blinking RED
-            rgb_matrix_set_color(0, red.r, red.g, red.b);
+            // @todo(emolitor) use md_getp_bat to implement battery level
+            rgb_matrix_set_color(0, 0, 0, 0);
         }
     }
 
