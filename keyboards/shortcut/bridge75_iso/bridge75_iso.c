@@ -46,6 +46,16 @@ void eeconfig_confinfo_init(void) {
     }
 }
 
+rgb_t hsv_to_matrix_adjusted_rgb(uint8_t h, uint8_t s, uint8_t v) {
+    hsv_t hsv = {h, s, v};
+
+    if (hsv.v > rgb_matrix_get_val()) {
+        hsv.v = rgb_matrix_get_val();
+    }
+
+    return hsv_to_rgb(hsv);
+}
+
 void keyboard_post_init_kb(void) {
 
 #ifdef CONSOLE_ENABLE
@@ -227,7 +237,7 @@ uint32_t wls_rgb_indicator_times    = 0;
 uint32_t wls_rgb_indicator_index    = 0;
 RGB wls_rgb_indicator_rgb           = {0};
 
-void rgb_matrix_wls_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uint8_t times) {
+void rgb_matrix_wls_indicator_set(uint8_t index, rgb_t rgb, uint32_t interval, uint8_t times) {
 
     wls_rgb_indicator_timer = timer_read32();
 
@@ -240,6 +250,7 @@ void rgb_matrix_wls_indicator_set(uint8_t index, RGB rgb, uint32_t interval, uin
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
 
     wls_rgb_indicator_reset = reset;
+    rgb_t blue = hsv_to_matrix_adjusted_rgb(HSV_BLUE);
 
     if (confinfo.devs != wireless_get_current_devs()) {
         confinfo.devs = wireless_get_current_devs();
@@ -249,30 +260,30 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
     switch (new_devs) {
         case DEVS_BT1: {
             if (reset) {
-                rgb_matrix_wls_indicator_set(15, (RGB){RGB_BLUE}, 200, 1);
+                rgb_matrix_wls_indicator_set(15, blue, 200, 1);
             } else {
-                rgb_matrix_wls_indicator_set(15, (RGB){RGB_BLUE}, 500, 1);
+                rgb_matrix_wls_indicator_set(15, blue, 500, 1);
             }
         } break;
         case DEVS_BT2: {
             if (reset) {
-                rgb_matrix_wls_indicator_set(16, (RGB){RGB_BLUE}, 200, 1);
+                rgb_matrix_wls_indicator_set(16, blue, 200, 1);
             } else {
-                rgb_matrix_wls_indicator_set(16, (RGB){RGB_BLUE}, 500, 1);
+                rgb_matrix_wls_indicator_set(16, blue, 500, 1);
             }
         } break;
         case DEVS_BT3: {
             if (reset) {
-                rgb_matrix_wls_indicator_set(17, (RGB){RGB_BLUE}, 200, 1);
+                rgb_matrix_wls_indicator_set(17, blue, 200, 1);
             } else {
-                rgb_matrix_wls_indicator_set(17, (RGB){RGB_BLUE}, 500, 1);
+                rgb_matrix_wls_indicator_set(17, blue, 500, 1);
             }
         } break;
         case DEVS_2G4: {
             if (reset) {
-                rgb_matrix_wls_indicator_set(18, (RGB){RGB_BLUE}, 200, 1);
+                rgb_matrix_wls_indicator_set(18, blue, 200, 1);
             } else {
-                rgb_matrix_wls_indicator_set(18, (RGB){RGB_BLUE}, 500, 1);
+                rgb_matrix_wls_indicator_set(18, blue, 500, 1);
             }
         } break;
         default:
@@ -320,16 +331,6 @@ void rgb_matrix_wls_indicator(void) {
     }
 }
 #    endif
-
-rgb_t hsv_to_matrix_adjusted_rgb(uint8_t h, uint8_t s, uint8_t v) {
-    hsv_t hsv = {h, s, v};
-
-    if (hsv.v > rgb_matrix_get_val()) {
-        hsv.v = rgb_matrix_get_val();
-    }
-
-    return hsv_to_rgb(hsv);
-}
 
 bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
