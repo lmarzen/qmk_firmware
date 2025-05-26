@@ -16,8 +16,9 @@ Work on this board is currently in progress.
 - [x] Add support for QSPI Flash
 - [x] Backport Updated Westberry Trimode Wireless
 - [x] Implement Basic PMIC/Battery Management
-- [ ] Implement LED Indicators
-- [ ] Investigate Power Management / Battery Life
+- [x] Implement LED Indicators
+- [ ] Implement battery level
+- [ ] Fix bluetooth
 
 ## Flashing a new firmware
 Hold ESCAPE [0,0] to enter bootloader mode while inserting the USB cable into
@@ -30,6 +31,9 @@ make shortcut/bridge75_iso:default:flash
 ## What wireless chip is the Bridge75 using?
 The Bridge75 uses a WCH CH582F running a custom firmware to provide wireless
 connectivity. The CH582F is attached to UART1 on the WB32FQ92.
+* UART1 (SD1)
+   * UART1_TX is on PA9
+   * UART1_RX is on PA10
 
 ![WCH CH582F](documentation/wireless.jpg)
 
@@ -44,20 +48,6 @@ The WB32FQ95 on the Bridge75 is using a Puya P25D80SH serial flash.
 ![Puya P25D80SH](documentation/flash.jpg)
 
 
-## WB32FQ95 which UART is the Bridge75 using?
-The WB32FQ95 supports 3 UARTS since PA2 and PA3 are used by the matrix we can
-rule UART2 out. Probing reveals the UART1 is used to connect to the CH582F.
-* UART1 (SD1)
-   * UART1_TX is on PA9
-   * UART1_RX is on PA10
-* UART2 (SD2)
-   * UART2_TX is on PA2
-   * UART2_RX is on PA3
-* UART3 (SD3)
-   * UART3_TX is on PC10
-   * UART3_RX is on PC11
-
-
 ## What battery charging circuit is present?
 A TP4056 IC is onboard which is used for battery charging and management. CHRG
 is low when charging and high when fully charged.
@@ -68,7 +58,8 @@ is low when charging and high when fully charged.
 
 
 ## How are the LEDs wired?
-The LEDs are WS2812 the first of which is wired to PB10.
+The LEDs are WS2812 the first of which is wired to PB10 and uses the bitbang
+driver.
 
 
 ## Reference Material
