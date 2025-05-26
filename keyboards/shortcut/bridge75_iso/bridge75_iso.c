@@ -8,6 +8,9 @@
 #    include "wireless.h"
 #endif
 
+uint8_t blink_index = 1; // LED Blink Index
+int8_t blink_direction = 1; // LED Blink Direction
+
 typedef union {
     uint32_t raw;
     struct {
@@ -335,6 +338,17 @@ void rgb_matrix_wls_indicator(void) {
 
 bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
+    // This implements what I call a pleasent blinker which doesn't require a
+    // timer. The V in HSV is essentially brightness so we create a variable
+    // called blink_index which oscilates from 1->255->1 and we use that as
+    // the Value in HSV. This creates a pleasently blinking color for the LED.
+    blink_index = blink_index + blink_direction;
+    if (blink_index == UINT8_MAX) {
+        blink_direction = -1; // go down...
+    } else if (blink_index == 1) {
+        blink_direction = 1; // go back up...
+    }
+
     if (rgb_matrix_indicators_advanced_user(led_min, led_max) != true) {
         return false;
     }
@@ -363,7 +377,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(0, green.r, green.g, green.b);
         } else {
             // Pin is low, charging
-            rgb_t red = hsv_to_matrix_adjusted_rgb(HSV_RED);
+            rgb_t red = hsv_to_matrix_adjusted_rgb(0, 255, blink_index); // Pleasently blinking RED
             rgb_matrix_set_color(0, red.r, red.g, red.b);
         }
     }
