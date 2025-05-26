@@ -50,9 +50,17 @@ The WB32FQ95 on the Bridge75 is using a Puya P25D80SH serial flash.
 
 ## What battery charging circuit is present?
 A TP4056 IC is onboard which is used for battery charging and management. CHRG
-is low when charging and high when fully charged.
+is low when charging and high when fully charged. The CH582F in addition to
+handline wireless also measures the battery strength. The escape key is used as
+an indicator for the battery.
 * STDBY of the TP4056 is wired to GROUND
 * CHRG of the TP4056 is wired to PIN PB9
+* Blinking Red is used to indicate charging when plugged in.
+* Solid Green is used to indicate fully charged when plugged in.
+* Red is used to indicate a battery of 0-9%
+* Yellow is used to indicate a battery of 10-49%
+* Blue is used to indicate a battery of 50-79%
+* Green is used to indicaste a battery of 80-100&
 
 ![TP4056](documentation/bmic.jpg)
 
