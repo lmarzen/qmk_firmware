@@ -868,6 +868,7 @@
         "timeout": 60000
     },
     "ws2812": {
+        "driver": "bitbang",
         "pin": "B10"
     },
     "layouts": {
