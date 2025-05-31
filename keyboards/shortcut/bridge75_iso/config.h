@@ -3,6 +3,10 @@
 
 #pragma once
 
+/* KEYS */
+#define SOFT_WHITE 0x68, 0x68, 0x68
+#define CAPSLOCK_INDEX 43
+
 /* FLASH */
 #define SPI_DRIVER SPIDQ
 #define SPI_SCK_PIN B3
