@@ -3,8 +3,14 @@
 
 #pragma once
 
+/* COLORS adjusted for RGB_MATRIX_MAXIMUM_BRIGHTNESS of 104 */
+#define RGB_ADJ_WHITE  0x68, 0x68, 0x68
+#define RGB_ADJ_BLUE   0x00, 0x68, 0x57
+#define RGB_ADJ_RED    0x68, 0x00, 0x00
+#define RGB_ADJ_YELLOW 0x68, 0x4b, 0x00
+#define RGB_ADJ_GREEN  0x3d, 0x68, 0x00
+
 /* KEYS */
-#define SOFT_WHITE 0x68, 0x68, 0x68
 #define CAPSLOCK_INDEX 43
 
 /* FLASH */
