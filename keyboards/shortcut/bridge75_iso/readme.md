@@ -13,10 +13,11 @@ Work on this board is currently in progress.
 - [x] Document basic components
 - [x] Probe and verify matrix
 - [x] Basic wired functionality
-- [x] Add support for QSPI Flash
+- [x] Implement QSPI Flash
+- [x] Implement RGB Matrix
+- [ ] Implement LED Indicators
 - [ ] Backport Updated Westberry Trimode Wireless
 - [ ] Implement Basic PMIC/Battery Management
-- [ ] Implement LED Indicators
 - [ ] Implement battery level
 - [ ] Fix bluetooth
 
