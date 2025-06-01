@@ -85,7 +85,6 @@ void suspend_wakeup_init_kb(void) {
 }
 
 void wireless_post_task(void) {
-    // auto switching devs
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
         md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
