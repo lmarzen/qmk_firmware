@@ -59,6 +59,14 @@ void keyboard_post_init_kb(void) {
     keyboard_post_init_user();
 }
 
+void usb_power_connect(void) {
+    gpio_write_pin_low(USB_POWER_EN_PIN);
+}
+
+void usb_power_disconnect(void) {
+    gpio_write_pin_high(USB_POWER_EN_PIN);
+}
+
 void suspend_power_down_kb(void) {
     gpio_write_pin_high(LED_POWER_EN_PIN);
 
