@@ -3,6 +3,13 @@
 
 #pragma once
 
+/*
+ * Specific tapping term for wireless configuration. If the key is held for
+ * less than 3 seconds we select that device for the active connection. If
+ * greater than 3 seconds we select that device and go into pairing mode.
+ */
+#define WIRELESS_TAPPING_TERM 3000
+
 /* COLORS adjusted for RGB_MATRIX_MAXIMUM_BRIGHTNESS of 104 */
 #define RGB_ADJ_WHITE   0x68, 0x68, 0x68
 #define RGB_ADJ_BLUE    0x00, 0x68, 0x57
@@ -38,3 +45,12 @@
 #define UART_TX_PAL_MODE 7
 #define UART_RX_PIN A10
 #define UART_RX_PAL_MODE 7
+
+/* WIRELESS NAMES */
+#define MD_BT1_NAME "Bridge75 BT1"
+#define MD_BT2_NAME "Bridge75 BT2"
+#define MD_BT3_NAME "Bridge75 BT3"
+#define MD_DONGLE_PRODUCT "Bridge75 Dongle"
+
+//#define LPWR_TIMEOUT RGB_MATRIX_TIMEOUT
+//#define WLS_KEYBOARD_REPORT_KEYS 5

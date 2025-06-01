@@ -22,6 +22,14 @@ uint32_t post_init_timer = 0x00;
 // firmware behaviour.
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case LT(0, KC_BT1):
+            return WIRELESS_TAPPING_TERM;
+        case LT(0, KC_BT2):
+            return WIRELESS_TAPPING_TERM;
+        case LT(0, KC_BT3):
+            return WIRELESS_TAPPING_TERM;
+        case LT(0, KC_2G4):
+            return WIRELESS_TAPPING_TERM;
         default:
             return TAPPING_TERM;
     }
@@ -75,6 +83,57 @@ void wireless_post_task(void) {
     }
 }
 
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+
+    if (process_record_user(keycode, record) != true) {
+        return false;
+    }
+
+    switch (keycode) {
+        case KC_BATQ: {
+            return false;
+        }
+        case KC_USB: {
+            wireless_devs_change(wireless_get_current_devs(), DEVS_USB, false);
+            return false;
+        }
+        case LT(0, KC_BT1): {
+            if (record->tap.count && record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, false);
+            } else if (record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
+            }
+            return false;
+        }
+        case LT(0, KC_BT2): {
+            if (record->tap.count && record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, false);
+            } else if (record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
+            }
+            return false;
+        }
+        case LT(0, KC_BT3): {
+            if (record->tap.count && record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, false);
+            } else if (record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
+            }
+            return false;
+        }
+        case LT(0, KC_2G4): {
+            if (record->tap.count && record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, false);
+            } else if (record->event.pressed) {
+                wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
+            }
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
 
     //wls_rgb_indicator_reset = reset;
@@ -83,15 +142,6 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
         confinfo.devs = wireless_get_current_devs();
         eeconfig_update_kb(confinfo.raw);
     }
-}
-
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-
-    if (process_record_user(keycode, record) != true) {
-        return false;
-    }
-
-    return true;
 }
 
 void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
@@ -159,6 +209,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             case DEVS_2G4: {
                 rgb_matrix_set_color(DEVS_2G4_INDEX, RGB_ADJ_WHITE);
             } break;
+
         }
     }
 
