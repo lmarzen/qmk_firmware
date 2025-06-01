@@ -16,6 +16,10 @@ typedef union {
 confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
+bool pairing = false;
+uint8_t blink_index = 0;
+bool blink_fast = true;
+bool blink_slow = true;
 
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
@@ -143,8 +147,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
-
-    //wls_rgb_indicator_reset = reset;
+    pairing = reset;
 
     if (confinfo.devs != wireless_get_current_devs()) {
         confinfo.devs = wireless_get_current_devs();
@@ -160,11 +163,51 @@ void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
     }
 }
 
-bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
-    static uint8_t blink_index = 0;
-    static bool blink_fast = true;
-    static bool blink_slow = true;
+void wireless_indicators(void) {
+    switch (confinfo.devs) {
+        case DEVS_USB: {
+            rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
+        } break;
+        case DEVS_BT1: {
+            if (pairing) {
+                blink(DEVS_BT1_INDEX, RGB_ADJ_WHITE, blink_fast);
+            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+                blink(DEVS_BT1_INDEX, RGB_ADJ_WHITE, blink_slow);
+            } else {
+                rgb_matrix_set_color(DEVS_BT1_INDEX, RGB_ADJ_WHITE);
+            }
+        } break;
+        case DEVS_BT2: {
+            if (pairing) {
+                blink(DEVS_BT2_INDEX, RGB_ADJ_WHITE, blink_fast);
+            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+                blink(DEVS_BT2_INDEX, RGB_ADJ_WHITE, blink_slow);
+            } else {
+                rgb_matrix_set_color(DEVS_BT2_INDEX, RGB_ADJ_WHITE);
+            }
+        } break;
+        case DEVS_BT3: {
+            if (pairing) {
+                blink(DEVS_BT3_INDEX, RGB_ADJ_WHITE, blink_fast);
+            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+                blink(DEVS_BT3_INDEX, RGB_ADJ_WHITE, blink_slow);
+            } else {
+                rgb_matrix_set_color(DEVS_BT3_INDEX, RGB_ADJ_WHITE);
+            }
+        } break;
+        case DEVS_2G4: {
+            if (pairing) {
+                blink(DEVS_2G4_INDEX, RGB_ADJ_WHITE, blink_fast);
+            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+                blink(DEVS_2G4_INDEX, RGB_ADJ_WHITE, blink_slow);
+            } else {
+                rgb_matrix_set_color(DEVS_2G4_INDEX, RGB_ADJ_WHITE);
+            }
+        } break;
+    }
+}
 
+bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
     blink_index = blink_index + 1;
     blink_fast = (blink_index % 64 == 0) ? !blink_fast : blink_fast;
     blink_slow = (blink_index % 128 == 0) ? !blink_slow : blink_slow;
@@ -201,24 +244,10 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         }
 
         // Show active connection
-        switch (confinfo.devs) {
-            case DEVS_USB: {
-                rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
-            } break;
-            case DEVS_BT1: {
-                rgb_matrix_set_color(DEVS_BT1_INDEX, RGB_ADJ_WHITE);
-            } break;
-            case DEVS_BT2: {
-                rgb_matrix_set_color(DEVS_BT2_INDEX, RGB_ADJ_WHITE);
-            } break;
-            case DEVS_BT3: {
-                rgb_matrix_set_color(DEVS_BT3_INDEX, RGB_ADJ_WHITE);
-            } break;
-            case DEVS_2G4: {
-                rgb_matrix_set_color(DEVS_2G4_INDEX, RGB_ADJ_WHITE);
-            } break;
-
-        }
+        wireless_indicators();
+    } else if (pairing) {
+        // Always show connections when pairing
+        wireless_indicators();
     }
 
     if (host_keyboard_led_state().caps_lock) {
