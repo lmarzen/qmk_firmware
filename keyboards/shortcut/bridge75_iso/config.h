@@ -4,15 +4,20 @@
 #pragma once
 
 /* COLORS adjusted for RGB_MATRIX_MAXIMUM_BRIGHTNESS of 104 */
-#define RGB_ADJ_WHITE  0x68, 0x68, 0x68
-#define RGB_ADJ_BLUE   0x00, 0x68, 0x57
-#define RGB_ADJ_RED    0x68, 0x00, 0x00
-#define RGB_ADJ_YELLOW 0x68, 0x4b, 0x00
-#define RGB_ADJ_GREEN  0x3d, 0x68, 0x00
+#define RGB_ADJ_WHITE   0x68, 0x68, 0x68
+#define RGB_ADJ_BLUE    0x00, 0x68, 0x57
+#define RGB_ADJ_RED     0x68, 0x00, 0x00
+#define RGB_ADJ_YELLOW  0x68, 0x4b, 0x00
+#define RGB_ADJ_GREEN   0x3d, 0x68, 0x00
 
 /* KEYS */
-#define ESCAPE_INDEX   0
-#define CAPSLOCK_INDEX 43
+#define ESCAPE_INDEX    0
+#define CAPSLOCK_INDEX  43
+#define DEVS_USB_INDEX  14
+#define DEVS_BT1_INDEX  15
+#define DEVS_BT2_INDEX  16
+#define DEVS_BT3_INDEX  17
+#define DEVS_2G4_INDEX  18
 
 /* FLASH */
 #define SPI_DRIVER SPIDQ

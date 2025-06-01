@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
+#include "wireless.h"
+#include "usb_main.h"
+#include "lowpower.h"
 
 typedef union {
     uint32_t raw;
@@ -12,10 +15,22 @@ typedef union {
 } confinfo_t;
 confinfo_t confinfo;
 
+uint32_t post_init_timer = 0x00;
+
+// We use per-key tapping term to allow the wireless keys to have a much
+// longer tapping term, therefore a longer hold, to match the default
+// firmware behaviour.
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        default:
+            return TAPPING_TERM;
+    }
+}
 void keyboard_post_init_kb(void) {
     confinfo.raw = eeconfig_read_kb();
     if (!confinfo.raw) {
         confinfo.flag = true;
+        confinfo.devs = DEVS_USB;
         eeconfig_update_kb(confinfo.raw);
     }
 
@@ -29,6 +44,10 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(USB_POWER_EN_PIN);
     gpio_write_pin_low(USB_POWER_EN_PIN);
 
+    wireless_init();
+    wireless_devs_change(!confinfo.devs, confinfo.devs, false);
+    post_init_timer = timer_read32();
+
     keyboard_post_init_user();
 }
 
@@ -41,7 +60,38 @@ void suspend_power_down_kb(void) {
 void suspend_wakeup_init_kb(void) {
     if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
 
+    wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
+}
+
+void wireless_post_task(void) {
+    // auto switching devs
+    if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
+        wireless_devs_change(!confinfo.devs, confinfo.devs, false);
+        post_init_timer = 0x00;
+    }
+}
+
+void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
+
+    //wls_rgb_indicator_reset = reset;
+
+    if (confinfo.devs != wireless_get_current_devs()) {
+        confinfo.devs = wireless_get_current_devs();
+        eeconfig_update_kb(confinfo.raw);
+    }
+}
+
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+
+    if (process_record_user(keycode, record) != true) {
+        return false;
+    }
+
+    return true;
 }
 
 void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
@@ -65,10 +115,10 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         return false;
     }
 
-    // When not in default layer set all mapped keys to yellow
+    // When not in default layer show UX
     if (get_highest_layer(layer_state) > 0) {
+        // Set all mapped keys to yellow
         uint8_t layer = get_highest_layer(layer_state);
-
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
@@ -84,15 +134,33 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         if (gpio_read_pin(BT_CABLE_PIN)) {
             // We are plugged in
             if (!gpio_read_pin(BT_CHARGE_PIN)) {
-                // We are charging
+                // We are charging blink red
                 blink(ESCAPE_INDEX, RGB_ADJ_RED, blink_slow);
             } else {
-                // We are fully charged
+                // We are fully charged solid green
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
             }
         }
-    }
 
+        // Show active connection
+        switch (confinfo.devs) {
+            case DEVS_USB: {
+                rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
+            } break;
+            case DEVS_BT1: {
+                rgb_matrix_set_color(DEVS_BT1_INDEX, RGB_ADJ_WHITE);
+            } break;
+            case DEVS_BT2: {
+                rgb_matrix_set_color(DEVS_BT2_INDEX, RGB_ADJ_WHITE);
+            } break;
+            case DEVS_BT3: {
+                rgb_matrix_set_color(DEVS_BT3_INDEX, RGB_ADJ_WHITE);
+            } break;
+            case DEVS_2G4: {
+                rgb_matrix_set_color(DEVS_2G4_INDEX, RGB_ADJ_WHITE);
+            } break;
+        }
+    }
 
     if (host_keyboard_led_state().caps_lock) {
         rgb_matrix_set_color(CAPSLOCK_INDEX, RGB_ADJ_WHITE);

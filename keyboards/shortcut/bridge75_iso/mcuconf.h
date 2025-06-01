@@ -6,5 +6,8 @@
 
 #include_next <mcuconf.h>
 
+#undef WB32_SERIAL_USE_UART1
+#define WB32_SERIAL_USE_UART1 TRUE
+
 #undef WB32_SPI_USE_QSPI
 #define WB32_SPI_USE_QSPI TRUE
