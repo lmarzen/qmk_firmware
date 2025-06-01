@@ -20,22 +20,29 @@ void keyboard_post_init_kb(void) {
     }
 
     // Set GPIO as high input for battery charging state
-    //gpio_set_pin_input(BT_CABLE_PIN);
-    //gpio_set_pin_input_high(BT_CHARGE_PIN);
+    gpio_set_pin_input(BT_CABLE_PIN);
+    gpio_set_pin_input_high(BT_CHARGE_PIN);
 
-//#ifdef LED_POWER_EN_PIN
-//    gpio_set_pin_output(LED_POWER_EN_PIN);
-//    gpio_write_pin_low(LED_POWER_EN_PIN);
-//#endif
+    gpio_set_pin_output(LED_POWER_EN_PIN);
+    if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
 
-//#ifdef USB_POWER_EN_PIN
-//    gpio_set_pin_output(USB_POWER_EN_PIN);
-//    gpio_write_pin_low(USB_POWER_EN_PIN);
-//#endif
+    gpio_set_pin_output(USB_POWER_EN_PIN);
+    gpio_write_pin_low(USB_POWER_EN_PIN);
 
     keyboard_post_init_user();
 }
 
+void suspend_power_down_kb(void) {
+    gpio_write_pin_high(LED_POWER_EN_PIN);
+
+    suspend_power_down_user();
+}
+
+void suspend_wakeup_init_kb(void) {
+    if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
+
+    suspend_wakeup_init_user();
+}
 
 void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
     if (blink) {
@@ -72,10 +79,22 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
                 }
             }
         }
+
+        // Check if we are plugged in
+        if (gpio_read_pin(BT_CABLE_PIN)) {
+            // We are plugged in
+            if (!gpio_read_pin(BT_CHARGE_PIN)) {
+                // We are charging
+                blink(ESCAPE_INDEX, RGB_ADJ_RED, blink_slow);
+            } else {
+                // We are fully charged
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
+            }
+        }
     }
 
+
     if (host_keyboard_led_state().caps_lock) {
-        //blink(CAPSLOCK_INDEX, RGB_ADJ_WHITE, blink_fast);
         rgb_matrix_set_color(CAPSLOCK_INDEX, RGB_ADJ_WHITE);
     }
 
