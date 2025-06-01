@@ -1,4 +1,5 @@
-// Copyright 2024 emolitor (github.com/emolitor)
+// Copyright 2025 emolitor (github.com/emolitor)
+// Copyright 2024 Westberry Technology (ChangZhou) Corp., Ltd
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
@@ -46,15 +47,15 @@ void keyboard_post_init_kb(void) {
         eeconfig_update_kb(confinfo.raw);
     }
 
-    // Set GPIO as high input for battery charging state
-    gpio_set_pin_input(BT_CABLE_PIN);
-    gpio_set_pin_input_high(BT_CHARGE_PIN);
-
     gpio_set_pin_output(LED_POWER_EN_PIN);
     if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
 
-    gpio_set_pin_output(USB_POWER_EN_PIN);
     gpio_write_pin_low(USB_POWER_EN_PIN);
+    gpio_set_pin_output(USB_POWER_EN_PIN);
+
+    // Set GPIO as high input for battery charging state
+    gpio_set_pin_input(BT_CABLE_PIN);
+    gpio_set_pin_input_high(BT_CHARGE_PIN);
 
     wireless_init();
     wireless_devs_change(!confinfo.devs, confinfo.devs, false);
