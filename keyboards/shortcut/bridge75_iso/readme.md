@@ -2,10 +2,10 @@
 The Bridge75 ISO is based on a Westberry Tech WB32FQ95 MCU in a LQFP64 package
 and can be programmed with wb32-dfu. The keyboard uses a WCH CH582F chip
 running a proprietary firmware to provide wireless connectivity. This is a
-community port which was derived from a partial source originally released by
-the manufacturer and reverse engineered by probing the hardware directly. Note
-I currently only have ISO PCBs so will focus on that until I can get ahold of
-an ANSI PCB to determine what difference need to be made.
+community port which only uses the pin configuration originally released by
+the manufacturer with the rest reverse engineered by probing the hardware
+directly. Note I currently only have ISO PCBs so will focus on that until I can
+get ahold of an ANSI PCB to determine what difference need to be made.
 
 
 ## Status
@@ -15,11 +15,10 @@ Work on this board is currently in progress.
 - [x] Basic wired functionality
 - [x] Implement QSPI Flash
 - [x] Implement RGB Matrix
-- [ ] Implement LED Indicators
-- [ ] Backport Updated Westberry Trimode Wireless
+- [x] Implement LED Indicators
+- [ ] Backport latest Westberry Trimode Wireless
 - [ ] Implement Basic PMIC/Battery Management
 - [ ] Implement battery level
-- [ ] Fix bluetooth
 
 ## Flashing a new firmware
 Hold ESCAPE [0,0] to enter bootloader mode while inserting the USB cable into
