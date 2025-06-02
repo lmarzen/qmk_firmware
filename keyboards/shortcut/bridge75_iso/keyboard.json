@@ -37,6 +37,7 @@
     "tapping": {
         "term_per_key": true
     },
+    "tap_keycode_delay": 10,
     "keycodes": [
         { "key": "KC_USB"  },
         { "key": "KC_BT1"  },
@@ -147,6 +148,7 @@
         "driver": "ws2812",
         "max_brightness": 104,
         "sleep": true,
+        "timeout": 120000,
         "default": {
             "animation": "cycle_left_right",
         },

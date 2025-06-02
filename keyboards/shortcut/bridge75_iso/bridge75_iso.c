@@ -4,8 +4,6 @@
 
 #include QMK_KEYBOARD_H
 #include "wireless.h"
-#include "usb_main.h"
-#include "lowpower.h"
 
 typedef union {
     uint32_t raw;
@@ -85,6 +83,15 @@ void suspend_wakeup_init_kb(void) {
     suspend_wakeup_init_user();
 }
 
+bool lpwr_is_allow_timeout_hook(void) {
+
+    if (wireless_get_current_devs() == DEVS_USB) {
+        return false;
+    }
+
+    return true;
+}
+
 void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
         md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
@@ -112,7 +119,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT1): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, false);
-            } else if (record->event.pressed) {
+            } else if (record->event.pressed && !pairing) {
+                pairing = true;
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
             }
             return false;
@@ -120,7 +128,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT2): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, false);
-            } else if (record->event.pressed) {
+            } else if (record->event.pressed && !pairing) {
+                pairing = true;
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
             }
             return false;
@@ -128,7 +137,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT3): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, false);
-            } else if (record->event.pressed) {
+            } else if (record->event.pressed && !pairing) {
+                pairing = true;
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
             }
             return false;
@@ -136,7 +146,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_2G4): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, false);
-            } else if (record->event.pressed) {
+            } else if (record->event.pressed && !pairing) {
+                pairing = true;
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
             }
             return false;
@@ -245,8 +256,8 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
         // Show active connection
         wireless_indicators();
-    } else if (pairing) {
-        // Always show connections when pairing
+    } else if (pairing || *md_getp_state() != MD_STATE_CONNECTED) {
+        // Always show connections when pairing or when not connected
         wireless_indicators();
     }
 
