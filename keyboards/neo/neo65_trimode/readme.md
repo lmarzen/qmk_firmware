@@ -33,7 +33,7 @@ connectivity. The CH582F is attached to UART1 on the WB32FQ92.
 ## What flash is the WB32FQ95 using on the Neo65?
 The WB32FQ95 on the Neo65 is using a Puya P25D80SH serial flash.
 * QSPI
-   * QSPI_SCK is on PB3
+   * QSPI_SCK  is on PB3
    * QSPI_MISO is on PB4
    * QSPI_MOSI is on PB5
 
@@ -59,7 +59,7 @@ A TP4056 IC is onboard which is used for battery charging and management.
 
 
 ## How are the LEDs wired?
-* PD2 is wired to the ESD LED
+* PD2 is wired to the ESC LED
 * PA8 is wired to the CAPSLOCK LED
 * PC11 is wired to the Q LED
 * PC10 is wired to the W LED

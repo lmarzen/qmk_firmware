@@ -45,6 +45,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                          _______, _______,            _______, _______, _______
     )
 };
+
+/*
 // clang-format on
 uint16_t pressed_code;
 uint16_t pressed_time = 0;
@@ -76,3 +78,4 @@ void housekeeping_task_user(void) {
         }
     }
 }
+*/

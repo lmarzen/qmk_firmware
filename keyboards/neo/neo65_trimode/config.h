@@ -1,51 +1,38 @@
-/* Copyright (C) 2025 emolitor@github.com/emolitor
- * Copyright (C) 2022 jonylee@hfd
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright 2025 emolitor (github.com/emolitor)
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
 
-/* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
-#define LOCKING_SUPPORT_ENABLE
+/*
+ * Specific tapping term for wireless configuration. If the key is held for
+ * less than 3 seconds we select that device for the active connection. If
+ * greater than 3 seconds we select that device and go into pairing mode.
+ */
+#define WIRELESS_TAPPING_TERM 3000
 
-/* Locking resynchronize hack */
-#define LOCKING_RESYNC_ENABLE
+/* KEYS */
+#define ESCAPE_PIN      D2
+#define CAPSLOCK_PIN    A8
+#define DEVS_BT1_PIN    C11
+#define DEVS_BT2_PIN    C10
+#define DEVS_BT3_PIN    A15
+#define DEVS_2G4_PIN    C0
 
-#define RGB_TRIGGER_ON_KEYDOWN
-
-/* SPI Config for spi flash*/
+/* FLASH */
 #define SPI_DRIVER SPIDQ
 #define SPI_SCK_PIN B3
 #define SPI_MOSI_PIN B5
 #define SPI_MISO_PIN B4
 #define SPI_MOSI_PAL_MODE 5
-
 #define EXTERNAL_FLASH_SPI_SLAVE_SELECT_PIN C12
-#define WEAR_LEVELING_BACKING_SIZE (8 * 1024)
 
-/* UART1 */
+/* UART */
 #define UART_TX_PIN A9
 #define UART_TX_PAL_MODE 7
 #define UART_RX_PIN A10
 #define UART_RX_PAL_MODE 7
 
-/* UART3 */
-//#define UART_DRIVER                         SD3
-//#define UART_TX_PIN                         C10
-//#define UART_TX_PAL_MODE                    7
-//#define UART_RX_PIN                         C11
-//#define UART_RX_PAL_MODE                    7
-
 #define LED_PIN_ON_STATE 0
+
+#define LPWR_TIMEOUT 120000
+//#define WLS_KEYBOARD_REPORT_KEYS 5
