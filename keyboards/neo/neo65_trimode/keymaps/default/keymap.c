@@ -23,7 +23,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [WIN_FN] = LAYOUT(
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, EE_CLR,
-        KC_USB, KC_BT1, KC_BT2, KC_BT3, KC_2G4, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        KC_USB, LT(0, KC_BT1), LT(0, KC_BT2), LT(0, KC_BT3), LT(0, KC_2G4), _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, _______,
         _______, _______, _______,                            _______,                          _______, _______,            _______, _______, _______
@@ -45,37 +45,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                          _______, _______,            _______, _______, _______
     )
 };
-
-/*
-// clang-format on
-uint16_t pressed_code;
-uint16_t pressed_time = 0;
-bool     process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case EE_CLR: {
-            pressed_code = keycode;
-            if (record->event.pressed) {
-                pressed_time = timer_read();
-            } else {
-                pressed_time = 0;
-            }
-            return false;
-        }
-        default:
-            return true;
-    }
-}
-
-void housekeeping_task_user(void) {
-    if (pressed_time && (timer_elapsed(pressed_time) >= 1500)) {
-        pressed_time = 0;
-        switch (pressed_code) {
-            case EE_CLR:
-                eeconfig_init();
-                break;
-            default:
-                break;
-        }
-    }
-}
-*/

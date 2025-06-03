@@ -6,12 +6,19 @@
     "processor": "WB32FQ95",
     "bootloader": "wb32-dfu",
     "usb": {
-        "device_version": "1.0.0",
+        "device_version": "0.0.1",
         "vid": "0xFFFE",
         "pid": "0x0015",
         "suspend_wakeup_delay": 1000
     },
     "diode_direction": "ROW2COL",
+    "eeprom": {
+        "driver": "wear_leveling",
+        "wear_leveling": {
+            "backing_size": 8192,
+            "driver": "spi_flash"
+        }
+    },
     "host": {
         "default": {
             "nkro": true
@@ -21,10 +28,13 @@
         "bootmagic": true,
         "command": false,
         "console": false,
+        "deferred_exec": true,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true,
-        "haptic": false
+        "nkro": true
+    },
+    "tapping": {
+        "term_per_key": true
     },
     "keycodes": [
         { "key": "KC_USB" },
