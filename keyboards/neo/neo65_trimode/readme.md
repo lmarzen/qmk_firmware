@@ -11,8 +11,8 @@ Work on this board is currently in progress.
 - [x] Document basic components
 - [x] Probe and verify matrix
 - [x] Basic wired functionality
-- [ ] Add support for QSPI Flash
-- [ ] Backport Westberry Trimode Wireless
+- [x] Add support for QSPI Flash
+- [x] Backport Westberry Trimode Wireless
 - [ ] Fix invalid USB VID/PID
 
 ## Flashing a new firmware

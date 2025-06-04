@@ -19,7 +19,10 @@ bool     pairing         = false;
 
 // Possible LED states.
 enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
-static uint8_t led_blink_state[NUM_LEDS_BLINK] = {0};
+
+// The size of this should match the number of devices in the device index in westberry/wireless/module.h
+// Default to zero to set all LEDs to a default state of OFF
+static uint8_t led_blink_state[7] = {0};
 
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
@@ -39,21 +42,36 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-uint32_t led_blink_callback(uint32_t trigger_time, void* cb_arg) {
-        static const uint8_t pattern[4] = {0x00, 0xff, 0x0f, 0xaa};
-        static uint8_t phase = 0;
-        phase = (phase + 1) % 8;
+uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
+    static const uint8_t pattern[4] = {0x00, 0xff, 0x0f, 0xaa};
+    static uint8_t       phase      = 0;
+    phase                           = (phase + 1) % 8;
 
-        uint8_t bit = 1 << phase;
-        writePin(ESCAPE_PIN, (pattern[led_blink_state[0]] & bit) != 0);
-        writePin(DEVS_BT1_PIN, (pattern[led_blink_state[1]] & bit) != 0);
-        writePin(DEVS_BT2_PIN, (pattern[led_blink_state[2]] & bit) != 0);
-        writePin(DEVS_BT3_PIN, (pattern[led_blink_state[3]] & bit) != 0);
-        //writePin(DEVS_2G4_PIN, (pattern[led_blink_state[4]] & bit) != 0);
+    // Default all connection indicators to off
+    led_blink_state[DEVS_USB] = LED_ON;
+    led_blink_state[DEVS_BT1] = LED_OFF;
+    led_blink_state[DEVS_BT2] = LED_OFF;
+    led_blink_state[DEVS_BT2] = LED_OFF;
+    led_blink_state[DEVS_2G4] = LED_OFF;
 
-        return LED_BLINK_FAST_PERIOD_MS / 2;
+    // set active indicator LED mode
+    if (pairing) {
+        led_blink_state[confinfo.devs] = LED_BLINK_FAST;
+    } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+        led_blink_state[confinfo.devs] = LED_BLINK_SLOW;
+    } else {
+        led_blink_state[confinfo.devs] = LED_ON;
+    }
+
+    uint8_t bit = 1 << phase;
+    writePin(ESCAPE_PIN, (pattern[led_blink_state[DEVS_USB]] & bit) != 0);
+    writePin(DEVS_BT1_PIN, (pattern[led_blink_state[DEVS_BT1]] & bit) != 0);
+    writePin(DEVS_BT2_PIN, (pattern[led_blink_state[DEVS_BT2]] & bit) != 0);
+    writePin(DEVS_BT3_PIN, (pattern[led_blink_state[DEVS_BT3]] & bit) != 0);
+    // writePin(DEVS_2G4_PIN, (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
+
+    return LED_BLINK_FAST_PERIOD_MS / 2;
 }
-
 
 void keyboard_post_init_kb(void) {
     confinfo.raw = eeconfig_read_kb();
@@ -67,7 +85,7 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(DEVS_BT1_PIN);
     gpio_set_pin_output(DEVS_BT2_PIN);
     gpio_set_pin_output(DEVS_BT3_PIN);
-    gpio_set_pin_output(DEVS_2G4_PIN);
+    //gpio_set_pin_output(DEVS_2G4_PIN);
 
     wireless_init();
     wireless_devs_change(!confinfo.devs, confinfo.devs, false);
@@ -158,49 +176,5 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
     if (confinfo.devs != wireless_get_current_devs()) {
         confinfo.devs = wireless_get_current_devs();
         eeconfig_update_kb(confinfo.raw);
-    }
-}
-
-void wireless_indicators(void) {
-    switch (confinfo.devs) {
-        case DEVS_USB: {
-            // No indicator
-        } break;
-        case DEVS_BT1: {
-            if (pairing) {
-                led_blink_state[DEVS_BT1_INDEX] = LED_BLINK_SLOW;
-            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
-                led_blink_state[DEVS_BT1_INDEX] = LED_BLINK_FAST;
-            } else {
-                led_blink_state[DEVS_BT1_INDEX] = LED_OFF;
-            }
-        } break;
-        case DEVS_BT2: {
-            if (pairing) {
-                led_blink_state[DEVS_BT2_INDEX] = LED_BLINK_SLOW;
-            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
-                led_blink_state[DEVS_BT2_INDEX] = LED_BLINK_SLOW;
-            } else {
-                led_blink_state[DEVS_BT2_INDEX] = LED_OFF;
-            }
-        } break;
-        case DEVS_BT3: {
-            if (pairing) {
-                led_blink_state[DEVS_BT3_INDEX] = LED_BLINK_SLOW;
-            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
-                led_blink_state[DEVS_BT3_INDEX] = LED_BLINK_SLOW;
-            } else {
-                led_blink_state[DEVS_BT3_INDEX] = LED_OFF;
-            }
-        } break;
-        case DEVS_2G4: {
-            if (pairing) {
-                led_blink_state[DEVS_2G4_INDEX] = LED_BLINK_SLOW;
-            } else if (*md_getp_state() != MD_STATE_CONNECTED) {
-                led_blink_state[DEVS_2G4_INDEX] = LED_BLINK_SLOW;
-            } else {
-                led_blink_state[DEVS_2G4_INDEX] = LED_OFF;
-            }
-        } break;
     }
 }
