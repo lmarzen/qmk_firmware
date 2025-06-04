@@ -31,11 +31,8 @@ static uint8_t led_blink_state[7] = {0};
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LT(0, KC_BT1):
-            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_BT2):
-            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_BT3):
-            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_2G4):
             return WIRELESS_TAPPING_TERM;
         default:
@@ -55,7 +52,7 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     led_blink_state[DEVS_BT3] = LED_OFF;
     led_blink_state[DEVS_2G4] = LED_OFF;
 
-    // set active indicator LED mode
+    // Set active indicator LED mode
     if (pairing) {
         led_blink_state[confinfo.devs] = LED_BLINK_FAST;
     } else if (*md_getp_state() != MD_STATE_CONNECTED) {
@@ -166,9 +163,9 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+        default:
+            return true;
     }
-
-    return true;
 }
 
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
