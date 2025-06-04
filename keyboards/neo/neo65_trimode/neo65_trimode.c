@@ -20,8 +20,9 @@ bool     pairing         = false;
 // Possible LED states.
 enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
 
-// The size of this should match the number of devices in the device index in westberry/wireless/module.h
-// Default to zero to set all LEDs to a default state of OFF
+// The size of this should match the number of devices in the device index in
+// westberry/wireless/module.h. Default to zero to set all LEDs to a default
+// state of OFF.
 static uint8_t led_blink_state[7] = {0};
 
 // We use per-key tapping term to allow the wireless keys to have a much
@@ -48,10 +49,10 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     phase                           = (phase + 1) % 8;
 
     // Default all connection indicators to off
-    led_blink_state[DEVS_USB] = LED_ON;
+    led_blink_state[DEVS_USB] = LED_OFF;
     led_blink_state[DEVS_BT1] = LED_OFF;
     led_blink_state[DEVS_BT2] = LED_OFF;
-    led_blink_state[DEVS_BT2] = LED_OFF;
+    led_blink_state[DEVS_BT3] = LED_OFF;
     led_blink_state[DEVS_2G4] = LED_OFF;
 
     // set active indicator LED mode
@@ -64,11 +65,11 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     }
 
     uint8_t bit = 1 << phase;
-    writePin(ESCAPE_PIN, (pattern[led_blink_state[DEVS_USB]] & bit) != 0);
+    //writePin(ESCAPE_PIN, (pattern[led_blink_state[DEVS_USB]] & bit) != 0);
     writePin(DEVS_BT1_PIN, (pattern[led_blink_state[DEVS_BT1]] & bit) != 0);
     writePin(DEVS_BT2_PIN, (pattern[led_blink_state[DEVS_BT2]] & bit) != 0);
     writePin(DEVS_BT3_PIN, (pattern[led_blink_state[DEVS_BT3]] & bit) != 0);
-    // writePin(DEVS_2G4_PIN, (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
+    writePin(ESCAPE_PIN,   (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
 
     return LED_BLINK_FAST_PERIOD_MS / 2;
 }
@@ -85,7 +86,7 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(DEVS_BT1_PIN);
     gpio_set_pin_output(DEVS_BT2_PIN);
     gpio_set_pin_output(DEVS_BT3_PIN);
-    //gpio_set_pin_output(DEVS_2G4_PIN);
+    // gpio_set_pin_output(DEVS_2G4_PIN);
 
     wireless_init();
     wireless_devs_change(!confinfo.devs, confinfo.devs, false);
