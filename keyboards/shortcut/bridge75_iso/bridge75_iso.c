@@ -15,7 +15,6 @@ typedef union {
 confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
-bool pairing = false;
 uint8_t blink_index = 0;
 bool blink_fast = true;
 bool blink_slow = true;
@@ -94,11 +93,49 @@ bool lpwr_is_allow_timeout_hook(void) {
 
 void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
-        md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
+        //md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
         wireless_devs_change(!confinfo.devs, confinfo.devs, false);
         post_init_timer = 0x00;
+    }
+}
+
+void md_devs_change(uint8_t devs, bool reset) {
+    switch (devs) {
+        case DEVS_USB: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_USB);
+        } break;
+        case DEVS_2G4: {
+            if (reset) {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            } else {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
+            }
+        } break;
+        case DEVS_BT1: {
+            if (reset) {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            } else {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
+            }
+        } break;
+        case DEVS_BT2: {
+            if (reset) {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            } else {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
+            }
+        } break;
+        case DEVS_BT3: {
+            if (reset) {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            } else {
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
+            }
+        } break;
+        default:
+            break;
     }
 }
 
@@ -119,8 +156,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT1): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
             }
             return false;
@@ -128,8 +164,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT2): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
             }
             return false;
@@ -137,8 +172,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT3): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
             }
             return false;
@@ -146,8 +180,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_2G4): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
             }
             return false;
@@ -158,8 +191,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
-    pairing = reset;
-
     if (confinfo.devs != wireless_get_current_devs()) {
         confinfo.devs = wireless_get_current_devs();
         eeconfig_update_kb(confinfo.raw);
@@ -180,7 +211,7 @@ void wireless_indicators(void) {
             rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
         } break;
         case DEVS_BT1: {
-            if (pairing) {
+            if (*md_getp_state() == MD_STATE_PAIRING) {
                 blink(DEVS_BT1_INDEX, RGB_ADJ_WHITE, blink_fast);
             } else if (*md_getp_state() != MD_STATE_CONNECTED) {
                 blink(DEVS_BT1_INDEX, RGB_ADJ_WHITE, blink_slow);
@@ -189,7 +220,7 @@ void wireless_indicators(void) {
             }
         } break;
         case DEVS_BT2: {
-            if (pairing) {
+            if (*md_getp_state() == MD_STATE_PAIRING) {
                 blink(DEVS_BT2_INDEX, RGB_ADJ_WHITE, blink_fast);
             } else if (*md_getp_state() != MD_STATE_CONNECTED) {
                 blink(DEVS_BT2_INDEX, RGB_ADJ_WHITE, blink_slow);
@@ -198,7 +229,7 @@ void wireless_indicators(void) {
             }
         } break;
         case DEVS_BT3: {
-            if (pairing) {
+            if (*md_getp_state() == MD_STATE_PAIRING) {
                 blink(DEVS_BT3_INDEX, RGB_ADJ_WHITE, blink_fast);
             } else if (*md_getp_state() != MD_STATE_CONNECTED) {
                 blink(DEVS_BT3_INDEX, RGB_ADJ_WHITE, blink_slow);
@@ -207,7 +238,7 @@ void wireless_indicators(void) {
             }
         } break;
         case DEVS_2G4: {
-            if (pairing) {
+            if (*md_getp_state() == MD_STATE_PAIRING) {
                 blink(DEVS_2G4_INDEX, RGB_ADJ_WHITE, blink_fast);
             } else if (*md_getp_state() != MD_STATE_CONNECTED) {
                 blink(DEVS_2G4_INDEX, RGB_ADJ_WHITE, blink_slow);
@@ -256,7 +287,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
         // Show active connection
         wireless_indicators();
-    } else if (pairing || *md_getp_state() != MD_STATE_CONNECTED) {
+    } else if (*md_getp_state() != MD_STATE_CONNECTED) {
         // Always show connections when pairing or when not connected
         wireless_indicators();
     }
