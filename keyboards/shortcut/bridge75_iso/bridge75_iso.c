@@ -93,7 +93,7 @@ bool lpwr_is_allow_timeout_hook(void) {
 
 void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
-        //md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
         wireless_devs_change(!confinfo.devs, confinfo.devs, false);
@@ -107,31 +107,34 @@ void md_devs_change(uint8_t devs, bool reset) {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_USB);
         } break;
         case DEVS_2G4: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
             if (reset) {
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
-            } else {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
             }
         } break;
         case DEVS_BT1: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             if (reset) {
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devinfo(MD_BT1_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
-            } else {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             }
         } break;
         case DEVS_BT2: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             if (reset) {
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devinfo(MD_BT2_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
-            } else {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             }
         } break;
         case DEVS_BT3: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devinfo(MD_BT3_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
-            } else {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             }
         } break;
         default:
