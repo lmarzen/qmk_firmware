@@ -24,6 +24,9 @@ enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
 // state of OFF.
 static uint8_t led_blink_state[7] = {0};
 
+// Hack
+void md_send_devinfo(const char *name);
+
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
 // firmware behaviour.
@@ -85,6 +88,8 @@ void keyboard_post_init_kb(void) {
     // gpio_set_pin_output(DEVS_2G4_PIN);
 
     wireless_init();
+    md_send_devinfo(MD_BT_NAME);
+    wait_ms(10);
     wireless_devs_change(!confinfo.devs, confinfo.devs, false);
     post_init_timer = timer_read32();
 
