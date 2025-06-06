@@ -15,9 +15,9 @@ typedef union {
 confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
-uint8_t blink_index = 0;
-bool blink_fast = true;
-bool blink_slow = true;
+uint8_t  blink_index     = 0;
+bool     blink_fast      = true;
+bool     blink_slow      = true;
 
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
@@ -83,7 +83,6 @@ void suspend_wakeup_init_kb(void) {
 }
 
 bool lpwr_is_allow_timeout_hook(void) {
-
     if (wireless_get_current_devs() == DEVS_USB) {
         return false;
     }
@@ -117,7 +116,7 @@ void md_devs_change(uint8_t devs, bool reset) {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             if (reset) {
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                //md_send_devinfo(MD_BT1_NAME);
+                // md_send_devinfo(MD_BT1_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
@@ -125,7 +124,7 @@ void md_devs_change(uint8_t devs, bool reset) {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             if (reset) {
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                //md_send_devinfo(MD_BT2_NAME);
+                // md_send_devinfo(MD_BT2_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
@@ -133,7 +132,7 @@ void md_devs_change(uint8_t devs, bool reset) {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                //md_send_devinfo(MD_BT3_NAME);
+                // md_send_devinfo(MD_BT3_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
@@ -143,7 +142,6 @@ void md_devs_change(uint8_t devs, bool reset) {
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-
     if (process_record_user(keycode, record) != true) {
         return false;
     }
@@ -254,8 +252,8 @@ void wireless_indicators(void) {
 
 bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
     blink_index = blink_index + 1;
-    blink_fast = (blink_index % 64 == 0) ? !blink_fast : blink_fast;
-    blink_slow = (blink_index % 128 == 0) ? !blink_slow : blink_slow;
+    blink_fast  = (blink_index % 64 == 0) ? !blink_fast : blink_fast;
+    blink_slow  = (blink_index % 128 == 0) ? !blink_slow : blink_slow;
 
     if (!rgb_matrix_indicators_advanced_user(led_min, led_max)) {
         return false;
@@ -269,8 +267,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
 
-                if (index >= led_min && index < led_max && index != NO_LED &&
-                keymap_key_to_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
+                if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
                     rgb_matrix_set_color(index, RGB_ADJ_YELLOW);
                 }
             }
@@ -285,6 +282,21 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             } else {
                 // We are fully charged solid green
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
+            }
+        } else {
+            if (blink_index == 0) {
+                md_inquire_bat();
+            }
+
+            uint8_t bat_level = *md_getp_bat();
+            if (bat_level > 99) {
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
+            } else if (bat_level > 50) {
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_BLUE);
+            } else if (bat_level > 10) {
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_YELLOW);
+            } else {
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_RED);
             }
         }
 
