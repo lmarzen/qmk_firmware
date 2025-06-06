@@ -117,6 +117,47 @@ void wireless_post_task(void) {
     }
 }
 
+void md_devs_change(uint8_t devs, bool reset) {
+    switch (devs) {
+        case DEVS_USB: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_USB);
+        } break;
+        case DEVS_2G4: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
+            if (reset) {
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            }
+        } break;
+        case DEVS_BT1: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
+            if (reset) {
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devinfo(MD_BT1_NAME);
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            }
+        } break;
+        case DEVS_BT2: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
+            if (reset) {
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devinfo(MD_BT2_NAME);
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            }
+        } break;
+            case DEVS_BT3: {
+            md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
+            if (reset) {
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devinfo(MD_BT3_NAME);
+                md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
+            }
+        } break;
+        default:
+            break;
+    }
+}
+
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if (process_record_user(keycode, record) != true) {
         return false;
