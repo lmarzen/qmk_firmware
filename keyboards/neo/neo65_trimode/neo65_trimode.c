@@ -15,7 +15,6 @@ typedef union {
 confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
-bool     pairing         = false;
 
 // Possible LED states.
 enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
@@ -53,7 +52,7 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     led_blink_state[DEVS_2G4] = LED_OFF;
 
     // Set active indicator LED mode
-    if (pairing) {
+    if (*md_getp_state() == MD_STATE_PAIRING) {
         led_blink_state[confinfo.devs] = LED_BLINK_FAST;
     } else if (*md_getp_state() != MD_STATE_CONNECTED) {
         led_blink_state[confinfo.devs] = LED_BLINK_SLOW;
@@ -171,8 +170,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT1): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT1, true);
             }
             return false;
@@ -180,8 +178,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT2): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT2, true);
             }
             return false;
@@ -189,8 +186,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_BT3): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_BT3, true);
             }
             return false;
@@ -198,8 +194,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case LT(0, KC_2G4): {
             if (record->tap.count && record->event.pressed) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, false);
-            } else if (record->event.pressed && !pairing) {
-                pairing = true;
+            } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
             }
             return false;
@@ -210,8 +205,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
-    pairing = reset;
-
     if (confinfo.devs != wireless_get_current_devs()) {
         confinfo.devs = wireless_get_current_devs();
         eeconfig_update_kb(confinfo.raw);
