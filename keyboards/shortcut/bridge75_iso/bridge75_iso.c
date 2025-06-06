@@ -295,10 +295,8 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_BLUE);
             } else if (bat_level > 10) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_YELLOW);
-            } else if (bat_level > 5) {
-                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_RED);
             } else {
-                blink(ESCAPE_INDEX, RGB_ADJ_RED, blink_fast);
+                rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_RED);
             }
         }
 
