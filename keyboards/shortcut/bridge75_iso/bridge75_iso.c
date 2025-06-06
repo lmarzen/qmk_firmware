@@ -115,14 +115,14 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_2G4: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
             if (reset) {
-                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
         case DEVS_BT1: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             if (reset) {
-                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT1_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
@@ -130,7 +130,7 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_BT2: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             if (reset) {
-                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT2_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
@@ -138,7 +138,7 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_BT3: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
-                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT3_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
@@ -268,14 +268,14 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
     // When not in default layer show UX
     if (get_highest_layer(layer_state) > 0) {
-        // Set all mapped keys to yellow
+        // Set all mapped keys to orange
         uint8_t layer = get_highest_layer(layer_state);
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
             for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
 
                 if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_TRNS) {
-                    rgb_matrix_set_color(index, RGB_ADJ_YELLOW);
+                    rgb_matrix_set_color(index, RGB_ADJ_ORANGE);
                 }
             }
         }
