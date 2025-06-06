@@ -289,14 +289,16 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             }
 
             uint8_t bat_level = *md_getp_bat();
-            if (bat_level > 99) {
+            if (bat_level > 90) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
             } else if (bat_level > 50) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_BLUE);
             } else if (bat_level > 10) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_YELLOW);
-            } else {
+            } else if (bat_level > 5) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_RED);
+            } else {
+                blink(ESCAPE_INDEX, RGB_ADJ_RED, blink_fast);
             }
         }
 
