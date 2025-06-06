@@ -13,7 +13,9 @@ Work on this board is currently in progress.
 - [x] Basic wired functionality
 - [x] Add support for QSPI Flash
 - [x] Backport Westberry Trimode Wireless
+- [x] Fix Bluetooth
 - [ ] Fix invalid USB VID/PID
+
 
 ## Flashing a new firmware
 Hold ESCAPE [0,0] to enter bootloader mode while inserting the USB cable into
@@ -21,6 +23,16 @@ the keyboard. Then run the following to flash the firmware.
 ```shell
 make neo/neo65_trimode:default:flash
 ```
+
+
+## Quirks
+The Neo65 uses a slightly different way to initialize the bluetooth device
+names. As the wireless stack is initialized in `keyboard_post_init_kb` a call
+is made to `md_send_devinfo` where the bluetooth name is passed but with the
+`$` character as the last character. The `$` is replaced with the BT device
+number when pairing. This seems to be a feature unique to this version of the
+CH582F firmware. This also means during pairing we do not 'CLEAN' the device
+and we do not upddate the device name. We simply send PAIR to `md_send_devctrl`.
 
 
 ## What wireless chip is the Neo65 using?
