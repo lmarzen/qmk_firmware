@@ -284,10 +284,6 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
             }
         } else {
-            if (blink_index == 0) {
-                md_inquire_bat();
-            }
-
             uint8_t bat_level = *md_getp_bat();
             if (bat_level > 90) {
                 rgb_matrix_set_color(ESCAPE_INDEX, RGB_ADJ_GREEN);
