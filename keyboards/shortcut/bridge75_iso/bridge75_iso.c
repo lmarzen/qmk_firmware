@@ -19,6 +19,10 @@ uint8_t  blink_index     = 0;
 bool     blink_fast      = true;
 bool     blink_slow      = true;
 
+// Expose md_send_devinfo to support the Bridge75 Bluetooth naming quirk
+// See the readme.md for more information about the quirk.
+void md_send_devinfo(const char *name);
+
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
 // firmware behaviour.
@@ -36,6 +40,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return TAPPING_TERM;
     }
 }
+
 void keyboard_post_init_kb(void) {
     confinfo.raw = eeconfig_read_kb();
     if (!confinfo.raw) {
@@ -55,6 +60,8 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_input_high(BT_CHARGE_PIN);
 
     wireless_init();
+    md_send_devinfo(MD_BT_NAME);
+    wait_ms(10);
     wireless_devs_change(!confinfo.devs, confinfo.devs, false);
     post_init_timer = timer_read32();
 
@@ -108,14 +115,14 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_2G4: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
             if (reset) {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
         case DEVS_BT1: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             if (reset) {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT1_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
@@ -123,7 +130,7 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_BT2: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             if (reset) {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT2_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
@@ -131,7 +138,7 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_BT3: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
-                md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
+                //md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 // md_send_devinfo(MD_BT3_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
