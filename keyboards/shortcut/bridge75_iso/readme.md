@@ -1,11 +1,9 @@
 #  Bridge75 ISO
 The Bridge75 ISO is based on a Westberry Tech WB32FQ95 MCU in a LQFP64 package
 and can be programmed with wb32-dfu. The keyboard uses a WCH CH582F chip
-running a proprietary firmware to provide wireless connectivity. This is a
-community port which only uses the pin configuration originally released by
-the manufacturer with the rest reverse engineered by probing the hardware
-directly. Note I currently only have ISO PCBs so will focus on that until I can
-get ahold of an ANSI PCB to determine what difference need to be made.
+running a proprietary firmware to provide wireless connectivity. Note I 
+currently only have ISO PCBs so will focus on that until I can get ahold of an
+ANSI PCB to determine what difference need to be made.
 
 
 ## Status
@@ -20,7 +18,17 @@ Work on this board is currently in progress.
 - [x] Implement Basic PMIC/Battery Management
 - [x] Implement Battery :evel
 - [x] Implement Bluetooth
-- [ ] Implement Advanced Power Management
+- [ ] Implement Advanced Power Management (this may be unnecessary)
+
+
+## Differences from the original firmware
+It is desired to maintain the behaviour of the existing user experience while
+updating the firmware. Like the original firmware the UX for the board is
+indicated when in Layer 1 (FN pressed on default layout) however the battery
+indicator is always shown in this mode. This is a difference from the original
+firmware where the battery level was only shown when KC_BATQ (default FN+D)
+was being pressed. This is due to the Westberry Wireless code maintaining the
+battery state automatically and allowing the implementation to be simplified.
 
 
 ## Flashing a new firmware
@@ -37,8 +45,8 @@ names. As the wireless stack is initialized in `keyboard_post_init_kb` a call
 is made to `md_send_devinfo` where the bluetooth name is passed but with the
 `$` character as the last character. The `$` is replaced with the BT device
 number when pairing. This seems to be a feature unique to this version of the
-CH582F firmware. This also means during pairing we do not 'CLEAN' the device
-and we do not upddate the device name. We simply send PAIR to `md_send_devctrl`.
+CH582F firmware. This also means during pairing do not 'CLEAN' the device and
+do not update the device name. Simply send PAIR to `md_send_devctrl`.
 
 
 ## What wireless chip is the Bridge75 using?
@@ -94,7 +102,7 @@ for porting in the repo to have everything in a single place.
 
 
 ## Tools
-These are the tools I'm using to reverse engineer the Bridge75.
+These are the tools I used to reverse engineer the Bridge75.
 
 * [Saleae Pro 16 Logic Analyzer](https://www.saleae.com)
 * [E-Z Hook X2015 SMD Probes](https://e-z-hook.com/test-hooks/micro-hook/x2015-ultra-thin-double-gripper-micro-test-hook/)

@@ -99,7 +99,7 @@ bool lpwr_is_allow_timeout_hook(void) {
 
 void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
-        md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
+        //md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
         wireless_devs_change(!confinfo.devs, confinfo.devs, false);
@@ -213,7 +213,7 @@ void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
     }
 }
 
-void wireless_indicators(void) {
+void connection_indicators(void) {
     switch (confinfo.devs) {
         case DEVS_USB: {
             rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
@@ -266,8 +266,8 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         return false;
     }
 
-    // When not in default layer show UX
-    if (get_highest_layer(layer_state) > 0) {
+    // When in Layer 1 show the UX
+    if (get_highest_layer(default_layer_state | layer_state) == 1) {
         // Set all mapped keys to orange
         uint8_t layer = get_highest_layer(layer_state);
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
@@ -304,10 +304,10 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         }
 
         // Show active connection
-        wireless_indicators();
-    } else if (*md_getp_state() != MD_STATE_CONNECTED) {
-        // Always show connections when pairing or when not connected
-        wireless_indicators();
+        connection_indicators();
+    } else if (confinfo.devs != DEVS_USB && *md_getp_state() != MD_STATE_CONNECTED) {
+        // Always show wireless connection indicators when not connected
+        connection_indicators();
     }
 
     if (host_keyboard_led_state().caps_lock) {
