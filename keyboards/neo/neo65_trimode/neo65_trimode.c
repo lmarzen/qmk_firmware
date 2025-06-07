@@ -57,18 +57,18 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     // Set active indicator LED mode
     if (*md_getp_state() == MD_STATE_PAIRING) {
         led_blink_state[confinfo.devs] = LED_BLINK_FAST;
-    } else if (*md_getp_state() != MD_STATE_CONNECTED) {
+    } else if (confinfo.devs != DEVS_USB && *md_getp_state() != MD_STATE_CONNECTED) {
         led_blink_state[confinfo.devs] = LED_BLINK_SLOW;
     } else {
         led_blink_state[confinfo.devs] = LED_ON;
     }
 
     uint8_t bit = 1 << phase;
-    //writePin(ESCAPE_PIN, (pattern[led_blink_state[DEVS_USB]] & bit) != 0);
+    writePin(ESCAPE_PIN, (pattern[led_blink_state[DEVS_USB]] & bit) != 0);
     writePin(DEVS_BT1_PIN, (pattern[led_blink_state[DEVS_BT1]] & bit) != 0);
     writePin(DEVS_BT2_PIN, (pattern[led_blink_state[DEVS_BT2]] & bit) != 0);
     writePin(DEVS_BT3_PIN, (pattern[led_blink_state[DEVS_BT3]] & bit) != 0);
-    writePin(ESCAPE_PIN,   (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
+    // writePin(DEVS_2G4_PIN,   (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
 
     return LED_BLINK_FAST_PERIOD_MS / 2;
 }
@@ -85,7 +85,7 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(DEVS_BT1_PIN);
     gpio_set_pin_output(DEVS_BT2_PIN);
     gpio_set_pin_output(DEVS_BT3_PIN);
-    // gpio_set_pin_output(DEVS_2G4_PIN);
+    //gpio_set_pin_output(DEVS_2G4_PIN);
 
     wireless_init();
     md_send_devinfo(MD_BT_NAME);
@@ -113,7 +113,7 @@ bool lpwr_is_allow_timeout_hook(void) {
 
 void wireless_post_task(void) {
     if (post_init_timer && timer_elapsed32(post_init_timer) >= 100) {
-        //md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
+        md_send_devctrl(MD_SND_CMD_DEVCTRL_FW_VERSION);   // get the module fw version.
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_BT_EN);  // timeout 30min to sleep in bt mode, enable
         md_send_devctrl(MD_SND_CMD_DEVCTRL_SLEEP_2G4_EN); // timeout 30min to sleep in 2.4g mode, enable
         wireless_devs_change(!confinfo.devs, confinfo.devs, false);
@@ -149,7 +149,7 @@ void md_devs_change(uint8_t devs, bool reset) {
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
-            case DEVS_BT3: {
+        case DEVS_BT3: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
                 // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
