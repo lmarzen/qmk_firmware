@@ -18,7 +18,6 @@ Work on this board is currently in progress.
 - [x] Implement Basic PMIC/Battery Management
 - [x] Implement Battery :evel
 - [x] Implement Bluetooth
-- [ ] Implement Advanced Power Management (this may be unnecessary)
 
 
 ## Differences from the original firmware
@@ -44,9 +43,10 @@ The Bridge75 uses a slightly different way to initialize the bluetooth device
 names. As the wireless stack is initialized in `keyboard_post_init_kb` a call
 is made to `md_send_devinfo` where the bluetooth name is passed but with the
 `$` character as the last character. The `$` is replaced with the BT device
-number when pairing. This seems to be a feature unique to this version of the
-CH582F firmware. This also means during pairing do not 'CLEAN' the device and
-do not update the device name. Simply send PAIR to `md_send_devctrl`.
+number when pairing. This seems to be a feature unique to the version of the
+CH582F firmware that HFD uses. This also means during pairing do not 'CLEAN'
+the device and do not update the device name. Simply send PAIR to
+`md_send_devctrl`.
 
 
 ## What wireless chip is the Bridge75 using?

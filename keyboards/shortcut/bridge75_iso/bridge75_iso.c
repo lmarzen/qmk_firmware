@@ -50,7 +50,7 @@ void keyboard_post_init_kb(void) {
     }
 
     gpio_set_pin_output(LED_POWER_EN_PIN);
-    if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
+    gpio_write_pin_low(LED_POWER_EN_PIN);
 
     gpio_write_pin_low(USB_POWER_EN_PIN);
     gpio_set_pin_output(USB_POWER_EN_PIN);
@@ -83,7 +83,7 @@ void suspend_power_down_kb(void) {
 }
 
 void suspend_wakeup_init_kb(void) {
-    if (rgb_matrix_get_val() != 0) gpio_write_pin_low(LED_POWER_EN_PIN);
+    gpio_write_pin_low(LED_POWER_EN_PIN);
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
