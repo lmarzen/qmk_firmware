@@ -54,4 +54,7 @@
 //#define MD_BT3_NAME "Bridge75 BT3"
 
 #define LPWR_TIMEOUT RGB_MATRIX_TIMEOUT
-//#define WLS_KEYBOARD_REPORT_KEYS 5
+#define WLS_KEYBOARD_REPORT_KEYS 5
+
+/* Enable a more aggressive processing of the wireless que*/
+# define AGGRESSIVE_WIRELESS_TASK = true
