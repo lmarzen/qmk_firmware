@@ -1,1 +1,1 @@
-include modules/westberry/wireless/wireless.mk
+include keyboards/shortcut/wireless/wireless.mk

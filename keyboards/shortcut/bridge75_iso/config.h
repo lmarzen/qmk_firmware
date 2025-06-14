@@ -57,4 +57,4 @@
 #define WLS_KEYBOARD_REPORT_KEYS 5
 
 /* Enable a more aggressive processing of the wireless que*/
-# define AGGRESSIVE_WIRELESS_TASK = true
+//# define AGGRESSIVE_WIRELESS_TASK = true
