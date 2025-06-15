@@ -1,4 +1,4 @@
-name: PR Lint keyboards
+name: EM Build
 
 permissions:
   contents: read
@@ -21,13 +21,18 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: |
         pip3 install -r requirements-dev.txt
         qmk setup --home .  --yes
 
-    - name: Bridge75 ANSI build
+    - name: Checkout Userspace
+      run: |
+        git clone https://github.com/emolitor/qmk_userspace_via/ --branch em-bridge75-wireless --single-branch
+        qmk config user.overlay_dir="$(realpath qmk_userspace_via)"
+
+    - name: Bridge75 ISO Build
       if: always()
       shell: 'bash {0}'
       run: |
-        qmk compile -kb shortcut/bridge75/ansi -km default
+        qmk userspace-compile
