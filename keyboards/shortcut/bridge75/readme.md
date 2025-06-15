@@ -1,9 +1,7 @@
-#  Bridge75 ISO
-The Bridge75 ISO is based on a Westberry Tech WB32FQ95 MCU in a LQFP64 package
+#  Bridge75
+The Bridge75 is based on a Westberry Tech WB32FQ95 MCU in a LQFP64 package
 and can be programmed with wb32-dfu. The keyboard uses a WCH CH582F chip
-running a proprietary firmware to provide wireless connectivity. Note I 
-currently only have ISO PCBs so will focus on that until I can get ahold of an
-ANSI PCB to determine what difference need to be made.
+running a proprietary firmware to provide wireless connectivity.
 
 
 ## Status
@@ -34,7 +32,8 @@ battery state automatically and allowing the implementation to be simplified.
 Hold ESCAPE [0,0] to enter bootloader mode while inserting the USB cable into
 the keyboard. Then run the following to flash the firmware.
 ```shell
-make shortcut/bridge75_iso:default:flash
+make shortcut/bridge75/ansi:default:flash
+make shortcut/bridge75/iso:default:flash
 ```
 
 
