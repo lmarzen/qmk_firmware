@@ -33,8 +33,10 @@
         "nkro": true,
         "haptic": false,
         "rgb_matrix": true,
-        "rgblight": false,
-        "deferred_exec": true
+        "rgb_light": false
+    },
+    "tapping": {
+        "term_per_key": true
     },
     "keycodes": [
         { "key": "KC_USB"  },
