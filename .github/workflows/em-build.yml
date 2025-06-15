@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip3 install -r requirements-dev.txt
-        cp /__w/qmk_firmware/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
+        sudo cp /__w/qmk_firmware/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     - name: Initialize QMK
       run: qmk setup --home . --yes
     - name: Bridge75 ANSI Build
