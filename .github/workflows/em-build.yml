@@ -21,6 +21,6 @@ jobs:
     - name: Install dependencies
       run: pip3 install -r requirements-dev.txt
     - name: Bridge75 ANSI Build
-      run: make shortcut/bridge75/ansi:default
+      run: qmk compile -kb shortcut/bridge75/ansi -km default
     #- name: Bridge75 ISO Build
     #  run: qmk compile -kb shortcut/bridge75/iso -km default
