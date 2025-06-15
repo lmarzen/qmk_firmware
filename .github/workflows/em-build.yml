@@ -20,6 +20,8 @@ jobs:
         submodules: recursive
     - name: Install dependencies
       run: pip3 install -r requirements-dev.txt
+    - name: Initialize QMK
+      run: qmk setup --home . --yes
     - name: Bridge75 ANSI Build
       run: qmk compile -kb shortcut/bridge75/ansi -km default
     #- name: Bridge75 ISO Build
