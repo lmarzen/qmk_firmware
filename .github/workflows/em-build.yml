@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
+        apt-get update -y
+        apt-get install -y python3-venv
         python3 -m venv qmk
         source qmk/bin/activate
         pip3 install qmk
