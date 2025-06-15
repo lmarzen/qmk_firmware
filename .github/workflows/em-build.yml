@@ -39,7 +39,7 @@ jobs:
 
     - name: Release
       uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            shortcut_bridge75_ansi_via.bin
-            shortcut_bridge75_iso_via.bin
+      with:
+        files: |
+          shortcut_bridge75_ansi_via.bin
+          shortcut_bridge75_iso_via.bin
