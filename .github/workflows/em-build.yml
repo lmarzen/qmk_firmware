@@ -1,0 +1,26 @@
+name: EM Build
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+    - em-bridge75-wireless
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/qmk/qmk_cli
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Install dependencies
+      run: pip3 install -r requirements-dev.txt
+    - name: Bridge75 ANSI Build
+      run: qmk compile -kb shortcut/bridge75/ansi -km default
+    - name: Bridge75 ISO Build
+      run: qmk compile -kb shortcut/bridge75/iso -km default
