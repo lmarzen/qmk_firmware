@@ -5,7 +5,8 @@ permissions:
 
 on:
   push:
-    branches: [em-bridge75-wireless]
+    tags:
+      - "em-*"
 
 jobs:
   build:
