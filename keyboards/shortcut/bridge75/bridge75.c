@@ -154,9 +154,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        case KC_BATQ: {
-            return false;
-        }
         case KC_USB: {
             wireless_devs_change(wireless_get_current_devs(), DEVS_USB, false);
             return false;
