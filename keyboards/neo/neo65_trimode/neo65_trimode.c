@@ -68,7 +68,7 @@ uint32_t led_blink_callback(uint32_t trigger_time, void *cb_arg) {
     writePin(DEVS_BT1_PIN, (pattern[led_blink_state[DEVS_BT1]] & bit) != 0);
     writePin(DEVS_BT2_PIN, (pattern[led_blink_state[DEVS_BT2]] & bit) != 0);
     writePin(DEVS_BT3_PIN, (pattern[led_blink_state[DEVS_BT3]] & bit) != 0);
-    // writePin(DEVS_2G4_PIN,   (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
+    writePin(DEVS_2G4_PIN, (pattern[led_blink_state[DEVS_2G4]] & bit) != 0);
 
     return LED_BLINK_FAST_PERIOD_MS / 2;
 }
@@ -85,7 +85,7 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(DEVS_BT1_PIN);
     gpio_set_pin_output(DEVS_BT2_PIN);
     gpio_set_pin_output(DEVS_BT3_PIN);
-    //gpio_set_pin_output(DEVS_2G4_PIN);
+    gpio_set_pin_output(DEVS_2G4_PIN);
 
     wireless_init();
     md_send_devinfo(MD_BT_NAME);
