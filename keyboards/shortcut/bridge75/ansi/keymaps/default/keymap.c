@@ -26,7 +26,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_USB,  LT(0, KC_BT1),  LT(0, KC_BT2),  LT(0, KC_BT3),  LT(0, KC_2G4),  _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,          _______,
-        _______, QK_RGB_MATRIX_TOGGLE, QK_RGB_MATRIX_MODE_NEXT, QK_RGB_MATRIX_MODE_PREVIOUS, QK_RGB_MATRIX_HUE_UP, QK_RGB_MATRIX_HUE_DOWN, QK_RGB_MATRIX_SATURATION_UP, QK_RGB_MATRIX_SATURATION_DOWN, QK_RGB_MATRIX_VALUE_UP, QK_RGB_MATRIX_VALUE_DOWN, _______,                   _______, _______, _______,
+        _______, RGB_TOG, RGB_MOD, RGB_RMOD,RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, _______,                   _______, _______, _______,
         _______,_______,_______,                             _______,                             _______, _______,          _______, _______, _______
     ),
 
