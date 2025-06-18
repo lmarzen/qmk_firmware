@@ -183,6 +183,25 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+        case LT(0, KC_NO): {
+            // Rather than using layers the default firmware uses dynamic key
+            // remapping to switch between WIN (Default) and MAC modes
+            if (!record->tap.count && record->event.pressed) {
+                if (dynamic_keymap_get_keycode(0, 5, 1) == KC_LALT) {
+                    // Switch to WIN mode (Default)
+                    dynamic_keymap_set_keycode(0, 5, 1, KC_LGUI);
+                    dynamic_keymap_set_keycode(0, 5, 2, KC_LALT);
+                    dynamic_keymap_set_keycode(0, 5, 9, KC_RALT);
+                } else if (dynamic_keymap_get_keycode(0, 5, 1) == KC_LGUI) {
+                    // Switch to MAC mode
+                    dynamic_keymap_set_keycode(0, 5, 1, KC_LALT);
+                    dynamic_keymap_set_keycode(0, 5, 2, KC_LGUI);
+                    dynamic_keymap_set_keycode(0, 5, 9, KC_RGUI);
+                }
+            } else if (record->event.pressed) {
+            }
+            return false;
+        }
     }
 
     return true;
