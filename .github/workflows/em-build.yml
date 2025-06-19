@@ -43,4 +43,5 @@ jobs:
       with:
         files: |
           shortcut_bridge75_ansi_via.bin
+          shortcut_bridge75_ansi_norgb_via.bin
           shortcut_bridge75_iso_via.bin
