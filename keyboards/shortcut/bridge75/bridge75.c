@@ -49,8 +49,10 @@ void keyboard_post_init_kb(void) {
         eeconfig_update_kb(confinfo.raw);
     }
 
+    #ifdef RGB_MATRIX_ENABLE
     gpio_set_pin_output(LED_POWER_EN_PIN);
     gpio_write_pin_low(LED_POWER_EN_PIN);
+    #endif
 
     gpio_write_pin_low(USB_POWER_EN_PIN);
     gpio_set_pin_output(USB_POWER_EN_PIN);
@@ -77,13 +79,17 @@ void usb_power_disconnect(void) {
 }
 
 void suspend_power_down_kb(void) {
+    #ifdef RGB_MATRIX_ENABLE
     gpio_write_pin_high(LED_POWER_EN_PIN);
+    #endif
 
     suspend_power_down_user();
 }
 
 void suspend_wakeup_init_kb(void) {
+    #ifdef RGB_MATRIX_ENABLE
     gpio_write_pin_low(LED_POWER_EN_PIN);
+    #endif
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
@@ -183,6 +189,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+        #ifdef VIA_ENABLE
         case LT(0, KC_NO): {
             // Rather than using layers the default firmware uses dynamic key
             // remapping to switch between WIN (Default) and MAC modes
@@ -202,6 +209,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+        #endif
     }
 
     return true;
@@ -214,6 +222,7 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
     }
 }
 
+#ifdef RGB_MATRIX_ENABLE
 void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
     if (blink) {
         rgb_matrix_set_color(key_index, r, g, b);
@@ -325,3 +334,4 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
     return true;
 }
+#endif

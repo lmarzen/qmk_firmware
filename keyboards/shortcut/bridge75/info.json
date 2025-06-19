@@ -32,7 +32,6 @@
         "mousekey": true,
         "nkro": true,
         "haptic": false,
-        "rgb_matrix": true,
         "rgb_light": false
     },
     "tapping": {

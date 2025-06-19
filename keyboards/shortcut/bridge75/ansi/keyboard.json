@@ -5,6 +5,9 @@
         "pid": "0xFEFE",
         "suspend_wakeup_delay": 1000
     },
+    "features": {
+        "rgb_matrix": true
+    },
     "rgb_matrix": {
         "layout": [
             { "flags": 1, "matrix": [0, 0],  "x":   7, "y": 0 },
