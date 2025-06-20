@@ -24,6 +24,23 @@ enum { LED_OFF = 0, LED_ON = 1, LED_BLINK_SLOW = 2, LED_BLINK_FAST = 3 };
 // state of OFF.
 static uint8_t led_blink_state[7] = {0};
 
+// Implement a circular linked list of devices to support FN+TAB device
+// selection
+struct devs_list {
+    int               devs;
+    struct devs_list *next;
+};
+
+struct devs_list devs[] = {
+    {.devs = DEVS_USB, .next = &devs[1]},
+    {.devs = DEVS_BT1, .next = &devs[2]},
+    {.devs = DEVS_BT2, .next = &devs[3]},
+    {.devs = DEVS_BT3, .next = &devs[4]},
+    {.devs = DEVS_2G4, .next = &devs[0]}
+};
+
+struct devs_list *current_dev = &devs[0]; // Default circular linked list to USB device
+
 // Hack
 void md_send_devinfo(const char *name);
 
@@ -129,31 +146,24 @@ void md_devs_change(uint8_t devs, bool reset) {
         case DEVS_2G4: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_2G4);
             if (reset) {
-                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
         case DEVS_BT1: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT1);
             if (reset) {
-                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                // md_send_devinfo(MD_BT1_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
         case DEVS_BT2: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT2);
             if (reset) {
-                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                // md_send_devinfo(MD_BT2_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
         case DEVS_BT3: {
             md_send_devctrl(MD_SND_CMD_DEVCTRL_BT3);
             if (reset) {
-                // md_send_devctrl(MD_SND_CMD_DEVCTRL_CLEAN);
-                // md_send_devinfo(MD_BT3_NAME);
                 md_send_devctrl(MD_SND_CMD_DEVCTRL_PAIR);
             }
         } break;
@@ -171,6 +181,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case KC_USB: {
             wireless_devs_change(wireless_get_current_devs(), DEVS_USB, false);
             return false;
+        }
+        case KC_NXT: {
+            if (record->event.pressed) {
+                current_dev = current_dev->next;
+                wireless_devs_change(wireless_get_current_devs(), current_dev->devs, false);
+                return false;
+            }
         }
         case LT(0, KC_BT1): {
             if (record->tap.count && record->event.pressed) {
