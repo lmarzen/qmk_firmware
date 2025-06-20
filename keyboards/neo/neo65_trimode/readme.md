@@ -6,17 +6,6 @@ a community port which was derived from a partial source originally released
 by the manufacturer and reverse engineered by probing the hardware directly.
 
 
-## Status
-Work on this board is currently in progress.
-- [x] Document basic components
-- [x] Probe and verify matrix
-- [x] Basic wired functionality
-- [x] Add support for QSPI Flash
-- [x] Backport Westberry Trimode Wireless
-- [x] Fix Bluetooth
-- [ ] Fix invalid USB VID/PID
-
-
 ## Flashing a new firmware
 Hold ESCAPE [0,0] to enter bootloader mode while inserting the USB cable into
 the keyboard. Then run the following to flash the firmware.
@@ -76,7 +65,7 @@ A TP4056 IC is onboard which is used for battery charging and management.
 * PC11 is wired to the Q LED
 * PC10 is wired to the W LED
 * PA15 is wired to the E LED
-* PC0 is wired to the R LED (Something is weird with this mapping I need to check it again)
+* PC0 is wired to the R LED
 
 ## Reference Material
 The following shouldn't be upstreamed but I've included documentation relevant
