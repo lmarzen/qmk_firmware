@@ -5,11 +5,15 @@
     "url": "https://github.com/emolitor",
     "processor": "WB32FQ95",
     "bootloader": "wb32-dfu",
+    "build": {
+        "lto": false
+    },
     "usb": {
         "device_version": "0.0.1",
         "vid": "0x0094",
         "pid": "0xFEFE",
-        "suspend_wakeup_delay": 1000
+        "suspend_wakeup_delay": 1000,
+        "no_startup_check": false
     },
     "diode_direction": "ROW2COL",
     "eeprom": {
