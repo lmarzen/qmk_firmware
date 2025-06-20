@@ -36,17 +36,24 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return WIRELESS_TAPPING_TERM;
         case LT(0, KC_2G4):
             return WIRELESS_TAPPING_TERM;
+        case LT(0, KC_NO):
+            return WIRELESS_TAPPING_TERM;
         default:
             return TAPPING_TERM;
     }
 }
 
+void eeconfig_init_kb(void) {
+    confinfo.flag = true;
+    confinfo.devs = DEVS_USB;
+    eeconfig_update_kb(confinfo.raw);
+    eeconfig_init_user();
+}
+
 void keyboard_post_init_kb(void) {
     confinfo.raw = eeconfig_read_kb();
     if (!confinfo.raw) {
-        confinfo.flag = true;
-        confinfo.devs = DEVS_USB;
-        eeconfig_update_kb(confinfo.raw);
+        eeconfig_init_kb();
     }
 
     #ifdef RGB_MATRIX_ENABLE
@@ -153,6 +160,14 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+        case EE_CLR: {
+            // Only reset the eeprom on keypress to avoid repeating eeprom
+            // clear if held down.
+            if (record->event.pressed) {
+                eeconfig_init();
+            }
+            return false;
+        }
         case KC_USB: {
             wireless_devs_change(wireless_get_current_devs(), DEVS_USB, false);
             return false;
