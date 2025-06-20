@@ -1,4 +1,4 @@
-# Quantum Mechanical Keyboard Firmware Wireless Fork
+# Quantum Mechanical Keyboard Wireless Fork
 This is a fork of the Quantum Mechanical Keyboard Firmware adding support
 for Westberry based wireless keyboards. These keyboards are based on a
 multichip solution coupling a WB32 MCU with a CH582F chip providing the
