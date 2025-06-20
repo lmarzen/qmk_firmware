@@ -11,13 +11,13 @@ which can be upstreamed. This fork does not and will not contain any binary
 blobs and is fully compliant with the upstream license used by QMK.
 
 The following keyboards are currently supported by this repository.
-* (Shortcut Studios Bridge75)[keyboards/shortcut/bridge75/]
-* (Neo Studios Neo65)[keyboards/neo/neo65_trimode/]
+* [Shortcut Studios Bridge75](keyboards/shortcut/bridge75/)
+* [Neo Studios Neo65](keyboards/neo/neo65_trimode/)
 
 This is a community supported repository with special thanks to Kasper at 
-(MONACOKEYS)[https://monacokeys.de] who provided some spare boards and endless
-time testing the initial port of the Bridge75. And to (SHORTCUT STUDIO)
-[https://shortcutofficial.com] for publishing the inital source code for the
+[MONACOKEYS](https://monacokeys.de) who provided some spare boards and endless
+time testing the initial port of the Bridge75. And to [SHORTCUT STUDIO]
+(https://shortcutofficial.com) for publishing the inital source code for the
 Bridge75 publicly and providing an ANSI Bridge75 PCB for development as well
 as testing and validating the initial Bridge75 port.
 
