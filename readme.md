@@ -16,10 +16,11 @@ The following keyboards are currently supported by this repository.
 
 This is a community supported repository with special thanks to Kasper at 
 [MONACOKEYS](https://monacokeys.de) who provided some spare boards and endless
-time testing the initial port of the Bridge75. And to [SHORTCUT STUDIO]
-(https://shortcutofficial.com) for publishing the inital source code for the
-Bridge75 publicly and providing an ANSI Bridge75 PCB for development as well
-as testing and validating the initial Bridge75 port.
+time testing the initial port of the Bridge75. And to
+[SHORTCUT STUDIO](https://shortcutofficial.com) for publishing the inital
+source code for the Bridge75 and providing an ANSI Bridge75 PCB for
+development as well testing and validating the initial Bridge75 port.
+
 
 # Quantum Mechanical Keyboard Firmware
 
