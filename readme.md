@@ -19,7 +19,9 @@ This is a community supported repository with special thanks to Kasper at
 time testing the initial port of the Bridge75. And to
 [SHORTCUT STUDIO](https://shortcutofficial.com) for publishing the inital
 source code for the Bridge75 and providing an ANSI Bridge75 PCB for
-development as well testing and validating the initial Bridge75 port.
+development as well testing and validating the initial Bridge75 port. And to
+[Neo Studio](https://www.instagram.com/ne0_kb) for providing PCBs of their
+boards.
 
 
 # Quantum Mechanical Keyboard Firmware
