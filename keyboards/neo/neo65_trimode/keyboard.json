@@ -1,7 +1,7 @@
 {
     "manufacturer": "NEO",
     "keyboard_name": "NEO65",
-    "maintainer": "community",
+    "maintainer": "emolitor@github",
     "url": "https://www.qwertykeys.com/products/neo65-1",
     "processor": "WB32FQ95",
     "bootloader": "wb32-dfu",
