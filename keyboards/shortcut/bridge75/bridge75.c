@@ -165,6 +165,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             // clear if held down.
             if (record->event.pressed) {
                 eeconfig_init();
+                wireless_devs_change(!confinfo.devs, confinfo.devs, false);
             }
             return false;
         }
