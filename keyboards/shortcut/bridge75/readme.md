@@ -4,20 +4,6 @@ and can be programmed with wb32-dfu. The keyboard uses a WCH CH582F chip
 running a proprietary firmware to provide wireless connectivity.
 
 
-## Status
-Work on this board is currently in progress.
-- [x] Document basic components
-- [x] Probe and verify matrix
-- [x] Basic wired functionality
-- [x] Implement QSPI Flash
-- [x] Implement RGB Matrix
-- [x] Implement LED Indicators
-- [x] Backport latest Westberry Trimode Wireless
-- [x] Implement Basic PMIC/Battery Management
-- [x] Implement Battery :evel
-- [x] Implement Bluetooth
-
-
 ## Differences from the original firmware
 It is desired to maintain the behaviour of the existing user experience while
 updating the firmware. Like the original firmware the UX for the board is
