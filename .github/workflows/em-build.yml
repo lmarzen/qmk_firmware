@@ -47,4 +47,4 @@ jobs:
           qmk_userspace_via/keyboards/shortcut/bridge75/ansi/shortcut_bridge75_ansi_via.json
           shortcut_bridge75_ansi_norgb_via.bin
           shortcut_bridge75_iso_via.bin
-          qmk_userspace_via/keyboards/shrotcut/bridge75/iso/shortcut_bridge75_iso_via.json
+          qmk_userspace_via/keyboards/shortcut/bridge75/iso/shortcut_bridge75_iso_via.json
