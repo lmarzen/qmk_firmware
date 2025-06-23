@@ -100,6 +100,8 @@ void suspend_power_down_kb(void) {
 void suspend_wakeup_init_kb(void) {
     #ifdef RGB_MATRIX_ENABLE
     gpio_write_pin_low(LED_POWER_EN_PIN);
+
+    rgb_matrix_enable();
     #endif
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
