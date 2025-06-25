@@ -33,7 +33,15 @@
         "mousekey": true,
         "nkro": true,
         "haptic": false,
-        "rgb_light": false
+        "rgb_light": false,
+        "rgb_matrix": true
+    },
+    "qmk": {
+        "locking": {
+            "enabled": true,
+            "resync": true
+        },
+        "tap_keycode_delay": 10
     },
     "tapping": {
         "term_per_key": true
