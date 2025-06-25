@@ -16,12 +16,10 @@ confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
 
-#ifdef RGB_MATRIX_ENABLE
 uint8_t  blink_index     = 0;
 bool     blink_fast      = true;
 bool     blink_slow      = true;
 bool     rgb_override    = false;
-#endif
 
 // Expose md_send_devinfo to support the Bridge75 Bluetooth naming quirk
 // See the readme.md for more information about the quirk.
@@ -60,10 +58,8 @@ void keyboard_post_init_kb(void) {
         eeconfig_init_kb();
     }
 
-    #ifdef RGB_MATRIX_ENABLE
     gpio_set_pin_output(LED_POWER_EN_PIN);
     gpio_write_pin_low(LED_POWER_EN_PIN);
-    #endif
 
     gpio_write_pin_low(USB_POWER_EN_PIN);
     gpio_set_pin_output(USB_POWER_EN_PIN);
@@ -90,21 +86,13 @@ void usb_power_disconnect(void) {
 }
 
 void suspend_power_down_kb(void) {
-    #ifdef RGB_MATRIX_ENABLE
     gpio_write_pin_high(LED_POWER_EN_PIN);
-    #endif
 
     suspend_power_down_user();
 }
 
 void suspend_wakeup_init_kb(void) {
-    #ifdef RGB_MATRIX_ENABLE
     gpio_write_pin_low(LED_POWER_EN_PIN);
-
-    // enable RGB on wakeup and force a repaint
-    rgb_matrix_enable();
-    rgb_matrix_set_color_all(0, 0, 0);
-    #endif
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
@@ -168,7 +156,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        #ifdef RGB_MATRIX_ENABLE
         case MO(1): {
             // Enable RGB temporarily when FN is pressed to show indicators
             if (record->event.pressed && !rgb_matrix_is_enabled()) {
@@ -189,7 +176,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
         }
-        #endif
         case EE_CLR: {
             // Only reset the eeprom on keypress to avoid repeating eeprom
             // clear if held down.
@@ -268,7 +254,6 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
     }
 }
 
-#ifdef RGB_MATRIX_ENABLE
 void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
     if (blink) {
         rgb_matrix_set_color(key_index, r, g, b);
@@ -386,7 +371,6 @@ void board_init(void) {
     gpio_set_pin_output(WS2812_DI_PIN);
     gpio_write_pin_low(WS2812_DI_PIN);
 }
-#endif
 
 // Experimental change for force MCU reset on unhandled_exception
 void _unhandled_exception(void) {

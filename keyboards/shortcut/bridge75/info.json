@@ -33,7 +33,8 @@
         "mousekey": true,
         "nkro": true,
         "haptic": false,
-        "rgb_light": false
+        "rgb_light": false,
+        "rgb_matrix": true
     },
     "qmk": {
         "locking": {
