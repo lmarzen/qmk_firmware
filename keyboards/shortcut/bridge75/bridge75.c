@@ -58,15 +58,20 @@ void keyboard_post_init_kb(void) {
         eeconfig_init_kb();
     }
 
-    gpio_set_pin_output(LED_POWER_EN_PIN);
     gpio_write_pin_low(LED_POWER_EN_PIN);
-
-    gpio_write_pin_low(USB_POWER_EN_PIN);
-    gpio_set_pin_output(USB_POWER_EN_PIN);
+    gpio_set_pin_output(LED_POWER_EN_PIN);
 
     // Set GPIO as high input for battery charging state
     gpio_set_pin_input(BT_CABLE_PIN);
     gpio_set_pin_input_high(BT_CHARGE_PIN);
+
+    // Set USB_POWER_EN_PIN state before enabling the output to avoid instability
+    if (confinfo.devs == DEVS_USB && gpio_read_pin(BT_CABLE_PIN)) {
+        gpio_write_pin_low(USB_POWER_EN_PIN);
+    } else {
+        gpio_write_pin_high(USB_POWER_EN_PIN);
+    }
+    gpio_set_pin_output(USB_POWER_EN_PIN);
 
     wireless_init();
     md_send_devinfo(MD_BT_NAME);
@@ -160,11 +165,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             // Enable RGB temporarily when FN is pressed to show indicators
             if (record->event.pressed && !rgb_matrix_is_enabled()) {
                 rgb_override = true;
-                rgb_matrix_toggle_noeeprom();
+                rgb_matrix_enable_noeeprom();
                 rgb_matrix_sethsv_noeeprom(HSV_OFF);
             } else if (rgb_override) {
                 rgb_override = false;
-                rgb_matrix_toggle_noeeprom();
+                rgb_matrix_reload_from_eeprom();
             }
             return true;
         }
@@ -264,9 +269,6 @@ void blink(uint8_t key_index, uint8_t r, uint8_t g, uint8_t b, bool blink) {
 
 void connection_indicators(void) {
     switch (confinfo.devs) {
-        case DEVS_USB: {
-            rgb_matrix_set_color(DEVS_USB_INDEX, RGB_ADJ_WHITE);
-        } break;
         case DEVS_BT1: {
             if (*md_getp_state() == MD_STATE_PAIRING) {
                 blink(DEVS_BT1_INDEX, RGB_ADJ_WHITE, blink_fast);

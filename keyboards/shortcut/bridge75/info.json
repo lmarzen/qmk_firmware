@@ -11,7 +11,7 @@
     "usb": {
         "device_version": "0.0.1",
         "suspend_wakeup_delay": 1000,
-        "no_startup_check": false
+        "no_startup_check": true
     },
     "diode_direction": "ROW2COL",
     "eeprom": {
@@ -65,28 +65,6 @@
         "driver": "ws2812",
         "max_brightness": 150,
         "sleep": true,
-        "timeout": 120000,
-        "default": {
-            "animation": "cycle_left_right"
-        },
-        "animations": {
-            "breathing": true,
-            "cycle_all": true,
-            "cycle_left_right": true,
-            "cycle_up_down": true,
-            "cycle_out_in": true,
-            "cycle_out_in_dual": true,
-            "rainbow_moving_chevron": true,
-            "cycle_pinwheel": true,
-            "cycle_spiral": true,
-            "dual_beacon": true,
-            "rainbow_beacon": true,
-            "raindrops": true,
-            "typing_heatmap": true,
-            "solid_color": true,
-            "solid_reactive_simple": true,
-            "solid_reactive": true,
-            "multisplash": true
-        }
+        "timeout": 120000
     }
 }
