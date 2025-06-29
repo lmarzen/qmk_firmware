@@ -12,8 +12,10 @@
 #undef WB32_SPI_USE_QSPI
 #define WB32_SPI_USE_QSPI TRUE
 
+// Harsh Deep Sleep bug fix, reboot on wake
 //#undef WB32_WAKEUP_RESET
 //#define WB32_WAKEUP_RESET TRUE
 
+// Milder Deep Sleep bug fix
 #undef LPWR_UART_WAKEUP_DISABLE
 #define LPWR_UART_WAKEUP_DISABLE TRUE
