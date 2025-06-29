@@ -1,5 +1,6 @@
 // Copyright 2025 emolitor (github.com/emolitor)
 // Copyright 2024 Westberry Technology (ChangZhou) Corp., Ltd
+// Copyright 2024 Wind (@yelishang)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
@@ -377,4 +378,91 @@ void board_init(void) {
 // Experimental change for force MCU reset on unhandled_exception
 void _unhandled_exception(void) {
     mcu_reset();
+}
+
+void wireless_send_nkro(report_nkro_t *report) {
+    static report_keyboard_t temp_report_keyboard = {0};
+    uint8_t wls_report_nkro[MD_SND_CMD_NKRO_LEN]  = {0};
+
+#ifdef NKRO_ENABLE
+
+    if (report != NULL) {
+        report_nkro_t temp_report_nkro = *report;
+        uint8_t key_count              = 0;
+
+        temp_report_keyboard.mods = temp_report_nkro.mods;
+        for (uint8_t i = 0; i < NKRO_REPORT_BITS; i++) {
+            key_count += __builtin_popcount(temp_report_nkro.bits[i]);
+        }
+
+        /*
+         * Use NKRO for sending when more than 6 keys are pressed
+         * to solve the issue of the lack of a protocol flag in wireless mode.
+         */
+
+        for (uint8_t i = 0; i < key_count; i++) {
+            uint8_t usageid;
+            uint8_t idx, n = 0;
+
+            for (n = 0; n < NKRO_REPORT_BITS && !temp_report_nkro.bits[n]; n++) {}
+            usageid = (n << 3) | biton(temp_report_nkro.bits[n]);
+            del_key_bit(&temp_report_nkro, usageid);
+
+            for (idx = 0; idx < WLS_KEYBOARD_REPORT_KEYS; idx++) {
+                if (temp_report_keyboard.keys[idx] == usageid) {
+                    goto next;
+                }
+            }
+
+            for (idx = 0; idx < WLS_KEYBOARD_REPORT_KEYS; idx++) {
+                if (temp_report_keyboard.keys[idx] == 0x00) {
+                    temp_report_keyboard.keys[idx] = usageid;
+                    break;
+                }
+            }
+        next:
+            if (idx == WLS_KEYBOARD_REPORT_KEYS && (usageid < (MD_SND_CMD_NKRO_LEN * 8))) {
+                wls_report_nkro[usageid / 8] |= 0x01 << (usageid % 8);
+            }
+        }
+
+                temp_report_nkro = *report;
+
+         // find key up and del it.
+        uint8_t nkro_keys = key_count;
+        for (uint8_t i = 0; i < WLS_KEYBOARD_REPORT_KEYS; i++) {
+            report_nkro_t found_report_nkro;
+            uint8_t usageid = 0x00;
+            uint8_t n;
+
+            found_report_nkro = temp_report_nkro;
+
+            for (uint8_t c = 0; c < nkro_keys; c++) {
+                for (n = 0; n < NKRO_REPORT_BITS && !found_report_nkro.bits[n]; n++) {}
+                usageid = (n << 3) | biton(found_report_nkro.bits[n]);
+                del_key_bit(&found_report_nkro, usageid);
+                if (usageid == temp_report_keyboard.keys[i]) {
+                    del_key_bit(&temp_report_nkro, usageid);
+                    nkro_keys--;
+                    break;
+                }
+            }
+
+            if (usageid != temp_report_keyboard.keys[i]) {
+                temp_report_keyboard.keys[i] = 0x00;
+            }
+        }
+
+            } else {
+        memset(&temp_report_keyboard, 0, sizeof(temp_report_keyboard));
+    }
+#endif
+    void wireless_task(void);
+    bool smsg_is_busy(void);
+    while(smsg_is_busy()) {
+        wireless_task();
+    }
+    extern host_driver_t wireless_driver;
+    wireless_driver.send_keyboard(&temp_report_keyboard);
+    md_send_nkro(wls_report_nkro);
 }
