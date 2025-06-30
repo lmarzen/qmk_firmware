@@ -122,10 +122,6 @@ void lpwr_clock_enable(void) {
 
     rccEnableEXTI();
 
-#if WB32_WAKEUP_RESET
-    mcu_reset();
-#endif
-
 #if WB32_SERIAL_USE_UART1
     rccEnableUART1();
 #endif
