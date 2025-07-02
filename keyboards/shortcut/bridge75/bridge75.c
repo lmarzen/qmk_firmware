@@ -17,10 +17,10 @@ confinfo_t confinfo;
 
 uint32_t post_init_timer = 0x00;
 
-uint8_t  blink_index     = 0;
-bool     blink_fast      = true;
-bool     blink_slow      = true;
-bool     rgb_override    = false;
+uint8_t blink_index  = 0;
+bool    blink_fast   = true;
+bool    blink_slow   = true;
+bool    rgb_override = false;
 
 // Expose md_send_devinfo to support the Bridge75 Bluetooth naming quirk
 // See the readme.md for more information about the quirk.
@@ -227,7 +227,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
-        #ifdef VIA_ENABLE
+#ifdef VIA_ENABLE
         case LT(0, KC_NO): {
             // Rather than using layers the default firmware uses dynamic key
             // remapping to switch between WIN (Default) and MAC modes
@@ -247,7 +247,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
-        #endif
+#endif
     }
 
     return true;
@@ -375,20 +375,20 @@ void board_init(void) {
     gpio_write_pin_low(WS2812_DI_PIN);
 }
 
-// Experimental change for force MCU reset on unhandled_exception
+// Force MCU reset on unhandled_exception
 void _unhandled_exception(void) {
     mcu_reset();
 }
 
+// Exprimental change to fix duplicate and hung key presses on wireless
 void wireless_send_nkro(report_nkro_t *report) {
-    static report_keyboard_t temp_report_keyboard = {0};
-    uint8_t wls_report_nkro[MD_SND_CMD_NKRO_LEN]  = {0};
+    static report_keyboard_t temp_report_keyboard                 = {0};
+    uint8_t                  wls_report_nkro[MD_SND_CMD_NKRO_LEN] = {0};
 
 #ifdef NKRO_ENABLE
-
     if (report != NULL) {
         report_nkro_t temp_report_nkro = *report;
-        uint8_t key_count              = 0;
+        uint8_t       key_count        = 0;
 
         temp_report_keyboard.mods = temp_report_nkro.mods;
         for (uint8_t i = 0; i < NKRO_REPORT_BITS; i++) {
@@ -404,7 +404,8 @@ void wireless_send_nkro(report_nkro_t *report) {
             uint8_t usageid;
             uint8_t idx, n = 0;
 
-            for (n = 0; n < NKRO_REPORT_BITS && !temp_report_nkro.bits[n]; n++) {}
+            for (n = 0; n < NKRO_REPORT_BITS && !temp_report_nkro.bits[n]; n++) {
+            }
             usageid = (n << 3) | biton(temp_report_nkro.bits[n]);
             del_key_bit(&temp_report_nkro, usageid);
 
@@ -426,19 +427,20 @@ void wireless_send_nkro(report_nkro_t *report) {
             }
         }
 
-                temp_report_nkro = *report;
+        temp_report_nkro = *report;
 
-         // find key up and del it.
+        // find key up and del it.
         uint8_t nkro_keys = key_count;
         for (uint8_t i = 0; i < WLS_KEYBOARD_REPORT_KEYS; i++) {
             report_nkro_t found_report_nkro;
-            uint8_t usageid = 0x00;
-            uint8_t n;
+            uint8_t       usageid = 0x00;
+            uint8_t       n;
 
             found_report_nkro = temp_report_nkro;
 
             for (uint8_t c = 0; c < nkro_keys; c++) {
-                for (n = 0; n < NKRO_REPORT_BITS && !found_report_nkro.bits[n]; n++) {}
+                for (n = 0; n < NKRO_REPORT_BITS && !found_report_nkro.bits[n]; n++) {
+                }
                 usageid = (n << 3) | biton(found_report_nkro.bits[n]);
                 del_key_bit(&found_report_nkro, usageid);
                 if (usageid == temp_report_keyboard.keys[i]) {
@@ -453,13 +455,13 @@ void wireless_send_nkro(report_nkro_t *report) {
             }
         }
 
-            } else {
+    } else {
         memset(&temp_report_keyboard, 0, sizeof(temp_report_keyboard));
     }
 #endif
     void wireless_task(void);
     bool smsg_is_busy(void);
-    while(smsg_is_busy()) {
+    while (smsg_is_busy()) {
         wireless_task();
     }
     extern host_driver_t wireless_driver;
