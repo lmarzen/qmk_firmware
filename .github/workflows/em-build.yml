@@ -32,19 +32,22 @@ jobs:
         git clone https://github.com/emolitor/qmk_userspace_via/ --branch wireless --single-branch
         qmk config user.overlay_dir="$(realpath qmk_userspace_via)"
 
-    - name: Bridge75 ISO Build
+    - name: Build
       if: always()
       shell: 'bash {0}'
       run: |
         qmk userspace-compile
+        for i in *.bin; do mv "$i" "${i%%.bin*}_version_$GITHUB_REF.bin"; done
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
+        generate_release_notes: true
+        prerelease: true
         files: |
-          neo_neo65_trimode_via.bin
-          shortcut_bridge75_ansi_via.bin
+          neo_neo65_trimode_via_$GITHUB_REF.bin
+          shortcut_bridge75_ansi_via_$GITHUB_REF.bin
           qmk_userspace_via/keyboards/shortcut/bridge75/ansi/shortcut_bridge75_ansi_via.json
-          shortcut_bridge75_ansi_norgb_via.bin
-          shortcut_bridge75_iso_via.bin
+          shortcut_bridge75_ansi_norgb_via_$GITHUB_REF.bin
+          shortcut_bridge75_iso_via_$GITHUB_REF.bin
           qmk_userspace_via/keyboards/shortcut/bridge75/iso/shortcut_bridge75_iso_via.json
