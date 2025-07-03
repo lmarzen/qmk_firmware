@@ -9,7 +9,8 @@
         "device_version": "0.0.1",
         "vid": "0xFFFE",
         "pid": "0x0015",
-        "suspend_wakeup_delay": 1000
+        "suspend_wakeup_delay": 1000,
+        "no_startup_check": true
     },
     "diode_direction": "ROW2COL",
     "eeprom": {
@@ -49,7 +50,8 @@
         "rows": ["C6", "C7", "C8", "C9", "B14"]
     },
     "indicators": {
-        "caps_lock": "A8"
+        "caps_lock": "A8",
+        "on_state": 0
     },
     "layouts": {
         "LAYOUT": {
