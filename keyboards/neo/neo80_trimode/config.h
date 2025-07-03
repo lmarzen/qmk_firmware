@@ -29,7 +29,7 @@
 #define EXTERNAL_FLASH_SPI_SLAVE_SELECT_PIN C12
 
 /* POWER */
-//#define USB_POWER_EN_PIN A14
+#define USB_POWER_EN_PIN A14
 #define LED_POWER_EN_PIN B13
 #define BT_CABLE_PIN B8 // High when charging
 #define BT_CHARGE_PIN B9 // Low when charging, high when fully charged

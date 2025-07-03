@@ -98,14 +98,26 @@ void keyboard_post_init_kb(void) {
         eeconfig_update_kb(confinfo.raw);
     }
 
-    gpio_write_pin_high(LED_POWER_EN_PIN);
-    gpio_set_pin_output(LED_POWER_EN_PIN);
+    gpio_write_pin_low(LED_POWER_EN_PIN);
+    gpio_set_pin_output_open_drain(LED_POWER_EN_PIN);
 
     gpio_set_pin_output(ESCAPE_PIN);
     gpio_set_pin_output(DEVS_BT1_PIN);
     gpio_set_pin_output(DEVS_BT2_PIN);
     gpio_set_pin_output(DEVS_BT3_PIN);
     gpio_set_pin_output(DEVS_2G4_PIN);
+
+    // Set GPIO as high input for battery charging state
+    //gpio_set_pin_input(BT_CABLE_PIN);
+    //gpio_set_pin_input_high(BT_CHARGE_PIN);
+
+    // Set USB_POWER_EN_PIN state before enabling the output to avoid instability
+    if (confinfo.devs == DEVS_USB && gpio_read_pin(BT_CABLE_PIN)) {
+        gpio_write_pin_low(USB_POWER_EN_PIN);
+    } else {
+        gpio_write_pin_high(USB_POWER_EN_PIN);
+    }
+    gpio_set_pin_output(USB_POWER_EN_PIN);
 
     wireless_init();
     md_send_devinfo(MD_BT_NAME);
@@ -118,14 +130,22 @@ void keyboard_post_init_kb(void) {
     keyboard_post_init_user();
 }
 
+void usb_power_connect(void) {
+    gpio_write_pin_low(USB_POWER_EN_PIN);
+}
+
+void usb_power_disconnect(void) {
+    gpio_write_pin_high(USB_POWER_EN_PIN);
+}
+
 void suspend_power_down_kb(void) {
-    gpio_write_pin_low(LED_POWER_EN_PIN);
+    gpio_write_pin_high(LED_POWER_EN_PIN);
 
     suspend_power_down_user();
 }
 
 void suspend_wakeup_init_kb(void) {
-    gpio_write_pin_high(LED_POWER_EN_PIN);
+    gpio_write_pin_low(LED_POWER_EN_PIN);
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
