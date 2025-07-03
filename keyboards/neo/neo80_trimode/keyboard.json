@@ -32,7 +32,10 @@
         "deferred_exec": true,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true
+        "nkro": true,
+        "haptic": false,
+        "rgb_light": false,
+        "rgb_matrix": true
     },
     "tapping": {
         "term_per_key": true
