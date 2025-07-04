@@ -30,6 +30,12 @@
 #define SPI_MOSI_PAL_MODE 5
 #define EXTERNAL_FLASH_SPI_SLAVE_SELECT_PIN C12
 
+/* POWER */
+#define USB_POWER_EN_PIN A14
+//#define LED_POWER_EN_PIN B13
+#define BT_CABLE_PIN B8 // High when charging
+#define BT_CHARGE_PIN B9 // Low when charging, high when fully charged
+
 /* UART */
 #define UART_TX_PIN A9
 #define UART_TX_PAL_MODE 7
@@ -40,9 +46,6 @@
 
 /* WIRELESS NAMES */
 #define MD_BT_NAME "NEO65 BT$"
-//#define MD_BT1_NAME "NEO65 BT1"
-//#define MD_BT2_NAME "NEO65 BT2"
-//#define MD_BT3_NAME "NEO65 BT3"
 
 #define LPWR_TIMEOUT 120000
-//#define WLS_KEYBOARD_REPORT_KEYS 5
+#define WLS_KEYBOARD_REPORT_KEYS 5
