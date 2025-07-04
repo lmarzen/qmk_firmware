@@ -108,8 +108,8 @@ void keyboard_post_init_kb(void) {
     gpio_set_pin_output(DEVS_2G4_PIN);
 
     // Set GPIO as high input for battery charging state
-    //gpio_set_pin_input(BT_CABLE_PIN);
-    //gpio_set_pin_input_high(BT_CHARGE_PIN);
+    // gpio_set_pin_input(BT_CABLE_PIN);
+    // gpio_set_pin_input_high(BT_CHARGE_PIN);
 
     // Set USB_POWER_EN_PIN state before enabling the output to avoid instability
     if (confinfo.devs == DEVS_USB && gpio_read_pin(BT_CABLE_PIN)) {
@@ -262,6 +262,23 @@ void wireless_devs_change_kb(uint8_t old_devs, uint8_t new_devs, bool reset) {
         confinfo.devs = wireless_get_current_devs();
         eeconfig_update_kb(confinfo.raw);
     }
+}
+
+bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
+    if (host_keyboard_led_state().caps_lock) {
+        rgb_matrix_set_color(0, RGB_ADJ_WHITE);
+        rgb_matrix_set_color(1, RGB_ADJ_WHITE);
+        rgb_matrix_set_color(2, RGB_ADJ_WHITE);
+        rgb_matrix_set_color(3, RGB_ADJ_WHITE);
+    }
+
+    return true;
+}
+
+// Temporary work around for WS2812 pin init
+void board_init(void) {
+    gpio_set_pin_output(WS2812_DI_PIN);
+    gpio_write_pin_low(WS2812_DI_PIN);
 }
 
 // Force MCU reset on unhandled_exception

@@ -12,6 +12,7 @@
 
 /* LEDS */
 #define LED_BLINK_FAST_PERIOD_MS 300
+#define RGB_ADJ_WHITE   0xC8, 0xC8, 0xC8
 
 /* KEYS */
 #define ESCAPE_PIN      D2
