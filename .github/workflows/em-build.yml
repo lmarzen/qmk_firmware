@@ -34,7 +34,7 @@ jobs:
 
     - name: Set output
       id: vars
-      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      run: echo "tag=${GITHUB_REF#refs/*/em-}" >> $GITHUB_OUTPUT
 
     - name: Build
       if: always()
@@ -44,6 +44,7 @@ jobs:
       run: |
         qmk userspace-compile
         for i in *.bin; do mv "$i" "${i%%.bin*}_version_$RELEASE_VERSION.bin"; done
+        ls -al
 
     - name: Release
       uses: softprops/action-gh-release@v2
