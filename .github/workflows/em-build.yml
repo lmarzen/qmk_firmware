@@ -43,7 +43,7 @@ jobs:
         RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
       run: |
         qmk userspace-compile
-        for i in *.bin; do mv "$i" "${i%%.bin*}_version_$RELEASE_VERSION.bin"; done
+        for i in *.bin; do mv "$i" "${i%%.bin*}_$RELEASE_VERSION.bin"; done
         ls -al
 
     - name: Release
