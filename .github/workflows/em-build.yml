@@ -32,12 +32,18 @@ jobs:
         git clone https://github.com/emolitor/qmk_userspace_via/ --branch wireless --single-branch
         qmk config user.overlay_dir="$(realpath qmk_userspace_via)"
 
+    - name: Set output
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
     - name: Build
       if: always()
       shell: 'bash {0}'
+      env:
+        RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
       run: |
         qmk userspace-compile
-        for i in *.bin; do mv "$i" "${i%%.bin*}_version_$GITHUB_REF.bin"; done
+        for i in *.bin; do mv "$i" "${i%%.bin*}_version_$RELEASE_VERSION.bin"; done
 
     - name: Release
       uses: softprops/action-gh-release@v2
@@ -45,9 +51,10 @@ jobs:
         generate_release_notes: true
         prerelease: true
         files: |
-          neo_neo65_trimode_via_$GITHUB_REF.bin
-          shortcut_bridge75_ansi_via_$GITHUB_REF.bin
+          neo_neo65_trimode_via_${{ steps.vars.outputs.tag }}.bin
+          neo_neo80_trimode_via_${{ steps.vars.outputs.tag }}.bin
+          shortcut_bridge75_ansi_via_${{ steps.vars.outputs.tag }}.bin
           qmk_userspace_via/keyboards/shortcut/bridge75/ansi/shortcut_bridge75_ansi_via.json
-          shortcut_bridge75_ansi_norgb_via_$GITHUB_REF.bin
-          shortcut_bridge75_iso_via_$GITHUB_REF.bin
+          shortcut_bridge75_ansi_norgb_via_${{ steps.vars.outputs.tag }}.bin
+          shortcut_bridge75_iso_via_${{ steps.vars.outputs.tag }}.bin
           qmk_userspace_via/keyboards/shortcut/bridge75/iso/shortcut_bridge75_iso_via.json
