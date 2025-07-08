@@ -287,7 +287,7 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
     }
 
     if (host_keyboard_led_state().caps_lock) {
-        for (uint8_t j = 5; j <= 15; j++) {
+        for (uint8_t j = 0; j <= 15; j++) {
             rgb_matrix_set_color(j, RGB_ADJ_WHITE);
         }
     }
