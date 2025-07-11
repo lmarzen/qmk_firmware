@@ -21,6 +21,7 @@ uint8_t blink_index  = 0;
 bool    blink_fast   = true;
 bool    blink_slow   = true;
 bool    rgb_override = false;
+bool    mac_mode     = false;
 
 // Expose md_send_devinfo to support the Bridge75 Bluetooth naming quirk
 // See the readme.md for more information about the quirk.
@@ -244,11 +245,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                     dynamic_keymap_set_keycode(0, 5, 1, KC_LGUI);
                     dynamic_keymap_set_keycode(0, 5, 2, KC_LALT);
                     dynamic_keymap_set_keycode(0, 5, 9, KC_RALT);
+                    mac_mode = false;
                 } else if (dynamic_keymap_get_keycode(0, 5, 1) == KC_LGUI) {
                     // Switch to MAC mode
                     dynamic_keymap_set_keycode(0, 5, 1, KC_LALT);
                     dynamic_keymap_set_keycode(0, 5, 2, KC_LGUI);
                     dynamic_keymap_set_keycode(0, 5, 9, KC_RGUI);
+                    mac_mode = true;
                 }
             } else if (record->event.pressed) {
             }
@@ -368,6 +371,12 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         // Always show wireless connection indicators when not connected
         connection_indicators();
     }
+
+#ifdef WIN_KEY_INDEX
+    if (mac_mode) {
+        rgb_matrix_set_color(WIN_KEY_INDEX, RGB_ADJ_WHITE);
+    }
+#endif
 
     if (host_keyboard_led_state().caps_lock) {
         rgb_matrix_set_color(CAPSLOCK_INDEX, RGB_ADJ_WHITE);

@@ -4,6 +4,7 @@
 #pragma once
 
 /* KEYS */
+#define WIN_KEY_INDEX   73
 #define CAPSLOCK_INDEX  44
 #define ESCAPE_INDEX    0
 #define DEVS_BT1_INDEX  15
