@@ -11,17 +11,23 @@ which can be upstreamed. This fork does not and will not contain any binary
 blobs and is fully compliant with the upstream license used by QMK.
 
 The following keyboards are currently supported by this repository.
-* [Shortcut Studios Bridge75](keyboards/shortcut/bridge75/)
 * [Neo Studios Neo65](keyboards/neo/neo65_trimode/)
+* [Neo Studios Neo70](keyboards/neo/neo70_trimode/)
+* [Neo Studios Neo80](keyboards/neo/neo80_trimode/)
+* [Neo Studios NeoErgo](keyboards/neo/neoergo_trimode/)
+* [QwertyKeys QK65V2 Classic](keyboards/qwertykeys/qk65v2classic/)
+* [Shortcut Studios Bridge75](keyboards/shortcut/bridge75/)
 
 This is a community supported repository with special thanks to Kasper at 
-[MONACOKEYS](https://monacokeys.de) who provided some spare boards and endless
+[Monacokeys](https://monacokeys.de) who provided some spare boards and endless
 time testing the initial port of the Bridge75. And to
-[SHORTCUT STUDIO](https://shortcutofficial.com) for publishing the inital
+[Shortcut Studio](https://shortcutofficial.com) for publishing the inital
 source code for the Bridge75 and providing an ANSI Bridge75 PCB for
 development as well testing and validating the initial Bridge75 port. And to
 [Neo Studio](https://www.instagram.com/ne0_kb) for providing PCBs of their
-boards.
+boards as well as testing and validing the Neo keyboards.
+[QwertyKeys](https://qwertykeys.com) for providing PCBs and validating and 
+testing the QK65V2 Classic
 
 
 # Quantum Mechanical Keyboard Firmware

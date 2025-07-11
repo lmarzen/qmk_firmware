@@ -15,7 +15,6 @@
 
 
 /* KEYS */
-#define CAPSLOCK_PIN    A8
 #define ESCAPE_PIN      D2
 #define DEVS_BT1_PIN    C11
 #define DEVS_BT2_PIN    C10
