@@ -2,8 +2,8 @@
     "keyboard_name": "Bridge75 NoRGB",
     "usb": {
         "device_version": "0.0.1",
-        "vid": "0x0C45",
-        "pid": "0xFEFE",
+        "vid": "0xFFFE",
+        "pid": "0x003E",
         "suspend_wakeup_delay": 1000
     },
     "rgb_matrix": {

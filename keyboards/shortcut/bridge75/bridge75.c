@@ -26,6 +26,11 @@ bool    rgb_override = false;
 // See the readme.md for more information about the quirk.
 void md_send_devinfo(const char *name);
 
+// Expose wireless_task and smsg_is_busy to allow for more aggressive
+// wireless_task processing and to prevent sleep when smsg_is_busy.
+void wireless_task(void);
+bool smsg_is_busy(void);
+
 // We use per-key tapping term to allow the wireless keys to have a much
 // longer tapping term, therefore a longer hold, to match the default
 // firmware behaviour.
@@ -85,6 +90,7 @@ void keyboard_post_init_kb(void) {
 
 void usb_power_connect(void) {
     gpio_write_pin_low(USB_POWER_EN_PIN);
+    wait_ms(5);
 }
 
 void usb_power_disconnect(void) {
@@ -102,10 +108,11 @@ void suspend_wakeup_init_kb(void) {
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
+    wait_ms(5);
 }
 
 bool lpwr_is_allow_timeout_hook(void) {
-    if (wireless_get_current_devs() == DEVS_USB) {
+    if (wireless_get_current_devs() == DEVS_USB || smsg_is_busy()) {
         return false;
     }
 
@@ -459,10 +466,15 @@ void wireless_send_nkro(report_nkro_t *report) {
         memset(&temp_report_keyboard, 0, sizeof(temp_report_keyboard));
     }
 #endif
-    void wireless_task(void);
-    bool smsg_is_busy(void);
+
+    uint32_t smsg_busy_timer = timer_read32();
     while (smsg_is_busy()) {
         wireless_task();
+
+        // Timeout protection - prevent infinite blocking
+        if (timer_elapsed32(smsg_busy_timer) > SMSG_BUSY_WAIT_TIMEOUT) {
+            break;
+        }
     }
     extern host_driver_t wireless_driver;
     wireless_driver.send_keyboard(&temp_report_keyboard);

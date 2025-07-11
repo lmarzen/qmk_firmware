@@ -48,5 +48,5 @@
 #define LPWR_TIMEOUT RGB_MATRIX_TIMEOUT
 #define WLS_KEYBOARD_REPORT_KEYS 5
 
-/* Enable a more aggressive processing of the wireless que*/
-//# define AGGRESSIVE_WIRELESS_TASK = true
+/* WIRELESS QUEUE BLOCKING AND OVERFLOW HANDLING */
+#define SMSG_BUSY_WAIT_TIMEOUT 50   // 50ms timeout for smsg_is_busy() wait loop
