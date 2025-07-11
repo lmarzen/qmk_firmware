@@ -11,6 +11,7 @@ typedef union {
     struct {
         uint8_t flag : 1;
         uint8_t devs : 3;
+        uint8_t deep_sleep_fix : 1;
     };
 } confinfo_t;
 confinfo_t confinfo;
@@ -45,6 +46,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return WIRELESS_TAPPING_TERM;
         case LT(0, KC_2G4):
             return WIRELESS_TAPPING_TERM;
+        case LT(0, SLP_FIX):
+            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_NO):
             return TAPPING_TERM;
         default:
@@ -53,8 +56,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 void eeconfig_init_kb(void) {
-    confinfo.flag = true;
-    confinfo.devs = DEVS_USB;
+    confinfo.flag           = true;
+    confinfo.devs           = DEVS_USB;
+    confinfo.deep_sleep_fix = false;
     eeconfig_update_kb(confinfo.raw);
     eeconfig_init_user();
 }
@@ -235,6 +239,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
+        case LT(0, SLP_FIX): {
+            if (!record->tap.count && record->event.pressed) {
+                confinfo.deep_sleep_fix = !confinfo.deep_sleep_fix;
+                eeconfig_update_kb(confinfo.raw);
+            }
+            return false;
+        }
 #ifdef VIA_ENABLE
         case LT(0, KC_NO): {
             // Rather than using layers the default firmware uses dynamic key
@@ -365,18 +376,24 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             }
         }
 
+#ifdef S_INDEX
+        if (confinfo.deep_sleep_fix) {
+            blink(S_INDEX, RGB_ADJ_RED, blink_slow);
+        }
+#endif
+
+#ifdef WIN_INDEX
+        if (mac_mode) {
+            blink(WIN_INDEX, RGB_ADJ_WHITE, blink_slow);
+        }
+#endif
+
         // Show active connection
         connection_indicators();
     } else if (confinfo.devs != DEVS_USB && *md_getp_state() != MD_STATE_CONNECTED) {
         // Always show wireless connection indicators when not connected
         connection_indicators();
     }
-
-#ifdef WIN_KEY_INDEX
-    if (mac_mode) {
-        rgb_matrix_set_color(WIN_KEY_INDEX, RGB_ADJ_WHITE);
-    }
-#endif
 
     if (host_keyboard_led_state().caps_lock) {
         rgb_matrix_set_color(CAPSLOCK_INDEX, RGB_ADJ_WHITE);
