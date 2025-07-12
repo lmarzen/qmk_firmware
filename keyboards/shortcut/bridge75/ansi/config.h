@@ -4,6 +4,7 @@
 #pragma once
 
 /* KEYS */
+#define USBSLP_INDEX    42 // KC_BSLS
 #define S_INDEX         46
 #define WIN_INDEX       73
 #define CAPSLOCK_INDEX  44
