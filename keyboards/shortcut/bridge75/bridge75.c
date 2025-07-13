@@ -49,6 +49,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return WIRELESS_TAPPING_TERM;
         case LT(0, SLP_FIX):
             return WIRELESS_TAPPING_TERM;
+        case LT(0, USBSLP):
+            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_NO):
             return TAPPING_TERM;
         default:
