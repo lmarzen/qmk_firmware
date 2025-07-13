@@ -61,7 +61,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 void eeconfig_init_kb(void) {
     confinfo.flag                          = true;
     confinfo.devs                          = DEVS_USB;
-    confinfo.deep_sleep_fix                = false;
+    confinfo.deep_sleep_fix                = true;
     confinfo.rgb_dont_sleep_on_usb_suspend = false;
     eeconfig_update_kb(confinfo.raw);
     eeconfig_init_user();
