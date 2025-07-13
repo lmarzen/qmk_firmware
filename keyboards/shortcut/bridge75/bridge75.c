@@ -514,15 +514,10 @@ void wireless_send_nkro(report_nkro_t *report) {
     }
 #endif
 
-    uint32_t smsg_busy_timer = timer_read32();
-    while (smsg_is_busy()) {
+    if (smsg_is_busy()) {
         wireless_task();
-
-        // Timeout protection - prevent infinite blocking
-        if (timer_elapsed32(smsg_busy_timer) > SMSG_BUSY_WAIT_TIMEOUT) {
-            break;
-        }
     }
+
     extern host_driver_t wireless_driver;
     wireless_driver.send_keyboard(&temp_report_keyboard);
     md_send_nkro(wls_report_nkro);
