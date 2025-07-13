@@ -59,9 +59,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 void eeconfig_init_kb(void) {
-    confinfo.flag           = true;
-    confinfo.devs           = DEVS_USB;
-    confinfo.deep_sleep_fix = false;
+    confinfo.flag                          = true;
+    confinfo.devs                          = DEVS_USB;
+    confinfo.deep_sleep_fix                = false;
     confinfo.rgb_dont_sleep_on_usb_suspend = false;
     eeconfig_update_kb(confinfo.raw);
     eeconfig_init_user();
@@ -107,7 +107,7 @@ void usb_power_disconnect(void) {
 }
 
 void suspend_power_down_kb(void) {
-    if (!confinfo.rgb_dont_sleep_on_usb_suspend) {
+    if (!confinfo.rgb_dont_sleep_on_usb_suspend && confinfo.devs == DEVS_USB && gpio_read_pin(BT_CABLE_PIN)) {
         rgb_matrix_disable_noeeprom();
         gpio_write_pin_high(LED_POWER_EN_PIN);
     }
