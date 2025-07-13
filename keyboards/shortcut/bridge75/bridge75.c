@@ -11,6 +11,8 @@ typedef union {
     struct {
         uint8_t flag : 1;
         uint8_t devs : 3;
+        uint8_t deep_sleep_fix : 1;
+        uint8_t rgb_dont_sleep_on_usb_suspend : 1;
     };
 } confinfo_t;
 confinfo_t confinfo;
@@ -45,6 +47,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
             return WIRELESS_TAPPING_TERM;
         case LT(0, KC_2G4):
             return WIRELESS_TAPPING_TERM;
+        case LT(0, SLP_FIX):
+            return WIRELESS_TAPPING_TERM;
+        case LT(0, USBSLP):
+            return WIRELESS_TAPPING_TERM;
         case LT(0, KC_NO):
             return TAPPING_TERM;
         default:
@@ -53,8 +59,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 void eeconfig_init_kb(void) {
-    confinfo.flag = true;
-    confinfo.devs = DEVS_USB;
+    confinfo.flag                          = true;
+    confinfo.devs                          = DEVS_USB;
+    confinfo.deep_sleep_fix                = true;
+    confinfo.rgb_dont_sleep_on_usb_suspend = false;
     eeconfig_update_kb(confinfo.raw);
     eeconfig_init_user();
 }
@@ -99,13 +107,17 @@ void usb_power_disconnect(void) {
 }
 
 void suspend_power_down_kb(void) {
-    gpio_write_pin_high(LED_POWER_EN_PIN);
+    if (!confinfo.rgb_dont_sleep_on_usb_suspend && confinfo.devs == DEVS_USB && gpio_read_pin(BT_CABLE_PIN)) {
+        rgb_matrix_disable_noeeprom();
+        gpio_write_pin_high(LED_POWER_EN_PIN);
+    }
 
     suspend_power_down_user();
 }
 
 void suspend_wakeup_init_kb(void) {
     gpio_write_pin_low(LED_POWER_EN_PIN);
+    rgb_matrix_reload_from_eeprom();
 
     wireless_devs_change(wireless_get_current_devs(), wireless_get_current_devs(), false);
     suspend_wakeup_init_user();
@@ -232,6 +244,20 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, false);
             } else if (record->event.pressed && *md_getp_state() != MD_STATE_PAIRING) {
                 wireless_devs_change(wireless_get_current_devs(), DEVS_2G4, true);
+            }
+            return false;
+        }
+        case LT(0, SLP_FIX): {
+            if (!record->tap.count && record->event.pressed) {
+                confinfo.deep_sleep_fix = !confinfo.deep_sleep_fix;
+                eeconfig_update_kb(confinfo.raw);
+            }
+            return false;
+        }
+        case LT(0, USBSLP): {
+            if (!record->tap.count && record->event.pressed) {
+                confinfo.rgb_dont_sleep_on_usb_suspend = !confinfo.rgb_dont_sleep_on_usb_suspend;
+                eeconfig_update_kb(confinfo.raw);
             }
             return false;
         }
@@ -365,18 +391,30 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
             }
         }
 
+#ifdef S_INDEX
+        if (confinfo.deep_sleep_fix) {
+            blink(S_INDEX, RGB_ADJ_RED, blink_slow);
+        }
+#endif
+
+#ifdef USBSLP_INDEX
+        if (confinfo.rgb_dont_sleep_on_usb_suspend) {
+            blink(USBSLP_INDEX, RGB_ADJ_WHITE, blink_slow);
+        }
+#endif
+
+#ifdef WIN_INDEX
+        if (mac_mode) {
+            blink(WIN_INDEX, RGB_ADJ_WHITE, blink_slow);
+        }
+#endif
+
         // Show active connection
         connection_indicators();
     } else if (confinfo.devs != DEVS_USB && *md_getp_state() != MD_STATE_CONNECTED) {
         // Always show wireless connection indicators when not connected
         connection_indicators();
     }
-
-#ifdef WIN_KEY_INDEX
-    if (mac_mode) {
-        rgb_matrix_set_color(WIN_KEY_INDEX, RGB_ADJ_WHITE);
-    }
-#endif
 
     if (host_keyboard_led_state().caps_lock) {
         rgb_matrix_set_color(CAPSLOCK_INDEX, RGB_ADJ_WHITE);
@@ -476,16 +514,17 @@ void wireless_send_nkro(report_nkro_t *report) {
     }
 #endif
 
-    uint32_t smsg_busy_timer = timer_read32();
-    while (smsg_is_busy()) {
+    if (smsg_is_busy()) {
         wireless_task();
-
-        // Timeout protection - prevent infinite blocking
-        if (timer_elapsed32(smsg_busy_timer) > SMSG_BUSY_WAIT_TIMEOUT) {
-            break;
-        }
     }
+
     extern host_driver_t wireless_driver;
     wireless_driver.send_keyboard(&temp_report_keyboard);
     md_send_nkro(wls_report_nkro);
+}
+
+void lpwr_clock_enable_user(void) {
+    if (confinfo.deep_sleep_fix) {
+        mcu_reset();
+    }
 }
